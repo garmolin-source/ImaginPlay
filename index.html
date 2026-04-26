@@ -278,11 +278,12 @@
       margin-bottom: 12px;
     }
     .output-label {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+      opacity: 0.75;
     }
     .output-text {
       font-size: 15px;
@@ -316,6 +317,60 @@
       box-shadow: var(--shadow);
     }
     .section-why .output-label { color: var(--text-soft); }
+
+    /* Output header banner */
+    .output-header {
+      background: var(--primary);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .output-header .output-header-icon { font-size: 28px; flex-shrink: 0; }
+    .output-header .output-header-text { font-size: 16px; font-weight: 600; line-height: 1.4; }
+    .output-header .output-header-sub { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+
+    /* Who plays who */
+    .roles-box {
+      background: #F4F0FF;
+      border: 1px solid #D9D0F5;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+    .roles-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #7C5CBF;
+      margin-bottom: 10px;
+    }
+    .roles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .role-card {
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .role-parent { background: #EBF5FF; border: 1px solid #BFDBFE; }
+    .role-child  { background: #FFF7ED; border: 1px solid #FED7AA; }
+    .role-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+    .role-parent .role-label { color: #2563EB; }
+    .role-child  .role-label { color: #EA580C; }
+    .role-name { font-size: 15px; font-weight: 700; color: var(--text); }
+    .roles-note { font-size: 13px; color: var(--text-soft); margin-top: 10px; font-style: italic; }
 
     /* How it unfolds */
     .section-shape {
@@ -828,9 +883,18 @@
 
       const nameStr = name ? ` for ${name}` : '';
 
+      const headerName = name ? `for ${name}` : '';
+
       if (data.triage_tier === 3) {
         el.innerHTML = `
-          ${section('normal', '🌱 A note first', data.this_is_normal)}
+          <div class="output-header">
+            <div class="output-header-icon">💛</div>
+            <div class="output-header-text">
+              A note before we suggest play
+              <div class="output-header-sub">We want to make sure you get the right support</div>
+            </div>
+          </div>
+          ${section('normal', '🌱 What you shared', data.this_is_normal)}
           ${section('redirect', '💬 What we recommend', data.redirect_message)}
           ${data.connection_activity ? section('connection', '🤝 Something simple for now', data.connection_activity) : ''}
         `;
@@ -838,10 +902,17 @@
         const isTier2 = data.triage_tier === 2;
 
         el.innerHTML = `
+          <div class="output-header">
+            <div class="output-header-icon">🎮</div>
+            <div class="output-header-text">
+              Here's your play idea${headerName ? ' ' + headerName : ''}
+              <div class="output-header-sub">Tap any section to read more — scroll down for the full plan</div>
+            </div>
+          </div>
           ${section('normal', '🌱 This is normal', data.this_is_normal)}
           ${data.the_spark ? section('spark', '⚡ The spark', data.the_spark) : ''}
-          ${data.the_why ? section('why', '💡 Why this works', data.the_why) : ''}
-          ${data.how_it_unfolds ? shapeSection(data.how_it_unfolds) : ''}
+          ${data.the_why ? section('why', '💡 Why this works for your child', data.the_why) : ''}
+          ${data.how_it_unfolds ? shapeSection(data.how_it_unfolds, data.roles) : ''}
           ${data.one_thing_to_watch ? section('watch', '👀 One thing to watch', data.one_thing_to_watch) : ''}
           ${data.take_out ? section('takeout', '📌 Before you finish', data.take_out) : ''}
           ${isTier2 && data.redirect_message ? section('redirect', '💬 Worth knowing', data.redirect_message) : ''}
@@ -862,7 +933,24 @@
       `;
     }
 
-    function shapeSection(steps) {
+    function shapeSection(steps, roles) {
+      const rolesHtml = roles ? `
+        <div class="roles-box">
+          <div class="roles-title">Who plays who</div>
+          <div class="roles-grid">
+            <div class="role-card role-parent">
+              <div class="role-label">You play</div>
+              <div class="role-name">${escapeHtml(roles.parent)}</div>
+            </div>
+            <div class="role-card role-child">
+              <div class="role-label">Your child plays</div>
+              <div class="role-name">${escapeHtml(roles.child)}</div>
+            </div>
+          </div>
+          ${roles.note ? `<div class="roles-note">${escapeHtml(roles.note)}</div>` : ''}
+        </div>
+      ` : '';
+
       const items = steps.map((step, i) => `
         <li>
           <span class="step-num">${i + 1}</span>
@@ -873,6 +961,7 @@
       return `
         <div class="output-section section-shape">
           <div class="output-label">🗺️ How it unfolds</div>
+          ${rolesHtml}
           <ul class="shape-steps">${items}</ul>
         </div>
       `;
