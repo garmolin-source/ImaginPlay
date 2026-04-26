@@ -1,0 +1,1381 @@
+IMAGINPLAY — PLAY ARCHETYPE KNOWLEDGE BASE
+==========================================
+Version 1.0
+17 Archetypes | Dual Age Band (2-5 and 6-8)
+==========================================
+
+HOW TO READ THIS DOCUMENT
+--------------------------
+Each archetype entry contains:
+- id: internal reference name
+- name + tagline: what the archetype is
+- developmental: goals, theories, research tier (1-5), Bluey validation
+- triggers: child states and parent goals that match this archetype, and what it is NOT for
+- context: energy levels, time needed, location, props
+- age_bands: separate expressions for 2-5 and 6-8, each with vehicle, parent role, spark, shape, normalization, watch_out
+- combinations: which archetypes pair well together and what leads to what
+- output: whether this archetype produces a real-world take-out item
+- sources: research and clinical references
+
+Research Tier Scale:
+1 = weakest direct evidence
+2 = some theoretical support
+3 = moderate evidence
+4 = strong evidence
+5 = very strong evidence, multiple studies
+
+==========================================
+ARCHETYPE 01 — ROLE REVERSAL
+==========================================
+
+id: role-reversal
+name: Role Reversal
+tagline: The child is in charge. The parent is helpless.
+
+DEVELOPMENTAL
+goals: self-efficacy, autonomy, confidence, decision-making
+theories: Erikson Initiative vs Guilt, Adlerian encouragement, Cohen reversal play
+research_tier: 3
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- feels powerless
+- overly dependent on parent
+- low confidence
+- anxious about not being capable
+- struggles to make decisions
+- always wants parent to lead
+
+parent_goals:
+- build confidence
+- encourage independence
+- help child feel capable
+- strengthen decision-making
+
+concepts: leadership, capability, agency, autonomy
+
+NOT_for: acute fear or distress, processing grief, high emotional overwhelm
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 15-30 min
+location: indoor, outdoor
+props_needed: none — child assigns meaning to whatever is nearby
+
+AGE BAND 2-5
+vehicle: symbolic fantasy play
+parent_role: Helpless, confused character who genuinely needs rescuing — play it completely straight
+child_role: Expert, rescuer, or authority figure
+spark: You're a wizard who keeps getting spells wrong and nothing works. Your child has to fix everything.
+shape:
+  1. Parent introduces a problem they truly cannot solve
+  2. Child takes over with full authority
+  3. Parent asks genuine questions — never leads, always follows
+  4. Child succeeds and teaches the parent what to do
+normalization: Between 3 and 5, children are developing their sense of initiative — the belief that they can act on the world and make things happen. Experiences of real authority, even in play, build that belief.
+watch_out: Play it fully straight. The moment you wink or break the fiction, the child loses the experience of genuine authority. No "good job being in charge" — just stay in the story.
+
+AGE BAND 6-8
+vehicle: competitive physical play or games with rules
+parent_role: Genuinely capable opponent who gets defeated through real play — not deliberately handed over
+child_role: The one who wins through real skill, strategy, or persistence
+spark: Set up a physical contest where you clearly have the advantage — arm wrestle, reaction game, balance challenge — and let them find the way to beat you.
+shape:
+  1. Parent sets up a real challenge with a genuine skill gap
+  2. Child experiments with strategies
+  3. Parent loses legitimately and plays the defeat fully straight
+  4. No debrief needed — the earned win says everything
+normalization: At 6-8 children are building their sense of competence. A win they earned against a genuine opponent does what a hundred encouragements cannot.
+watch_out: Don't hand the win over. Children this age can feel the difference immediately. The win only builds confidence if it was genuinely earned.
+
+COMBINATIONS
+pairs_well_with: child-expert, silly-spiral, underdog-wins
+often_leads_to: child-expert
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Erikson — Childhood and Society
+Cohen — Playful Parenting
+Drewes & Schaefer — Play Therapy in Middle Childhood
+
+
+==========================================
+ARCHETYPE 02 — MUNDANE MISSION
+==========================================
+
+id: mundane-mission
+name: Mundane Mission
+tagline: An ordinary task becomes an urgent quest.
+
+DEVELOPMENTAL
+goals: task persistence, delayed gratification, cooperation, executive function
+theories: Vygotsky scaffolding, Batman Effect (White et al.), narrative as motivational frame
+research_tier: 5
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- gives up quickly
+- resists chores or tasks
+- struggles to follow through
+- low frustration tolerance
+- transitions are hard
+- won't get dressed or tidy up
+
+parent_goals:
+- help child complete tasks
+- make transitions easier
+- build follow-through
+- reduce daily battles over routines
+- teach delayed gratification
+
+concepts: persistence, effort, completion, cooperation
+
+NOT_for: processing emotions, acute fear, social skill building
+
+CONTEXT
+energy_levels: medium, high
+time_needed: 5-20 min
+location: indoor, outdoor, car, any
+props_needed: none — uses whatever task or environment is already present
+
+AGE BAND 2-5
+vehicle: fantasy narrative overlay on a real task
+parent_role: Co-adventurer and mission commander — fully in the story
+child_role: Fellow adventurer, often the brave or skilled one
+spark: Getting dressed is actually a suit-up sequence before a secret mission. You have exactly 60 seconds before the portal opens.
+shape:
+  1. Reframe the real task as a mission with stakes before it begins
+  2. Parent plays co-adventurer — not director
+  3. Obstacles appear naturally — they are part of the mission
+  4. Completion is celebrated as mission success, not task completion
+normalization: Resistance to tasks at this age is developmentally normal — the child's brain doesn't yet generate intrinsic motivation for "because I said so." Narrative gives them a reason that works with how their brain actually functions.
+watch_out: Don't break the frame to give real instructions. If the mission is real, stay in it. "The captain says left shoe first" works. "Stop playing, just put your shoe on" kills it instantly.
+
+AGE BAND 6-8
+vehicle: timed challenge with a scoring system and real debrief
+parent_role: Mission control — sets the challenge, tracks the score, delivers the debrief
+child_role: Operative completing the mission
+spark: You have 4 minutes to tidy this room. I'm timing. Beat the record and we log it on the board.
+shape:
+  1. Frame the task as a timed challenge with a real metric
+  2. Parent tracks time or score genuinely — no inflation
+  3. Child completes it with real effort
+  4. Brief debrief: time logged, improvement noted, next mission set
+normalization: At 6-8 children respond to real challenge and real metrics. The timer makes the task finite and conquerable. The record makes effort meaningful across sessions.
+watch_out: Keep the metrics honest. If you inflate the score to make them feel good, the whole system loses credibility fast. A real record they actually beat means something.
+
+COMBINATIONS
+pairs_well_with: underdog-wins, child-expert, resilience-through-struggle
+often_leads_to: underdog-wins
+
+OUTPUT
+produces_take_out: true
+take_out_description: A mission log or record board the child can return to — makes effort visible and persistent across sessions. Write the time or score together before the session ends.
+
+SOURCES
+White et al. — Batman Effect, University of Minnesota
+Vygotsky — Mind in Society
+PMC10766374 — Pretend play and self-regulation, Frontiers in Psychology
+
+
+==========================================
+ARCHETYPE 03 — FEELINGS AS CHARACTERS
+==========================================
+
+id: feelings-as-characters
+name: Feelings as Characters
+tagline: An emotion gets a name, a shape, and a role in the story.
+
+DEVELOPMENTAL
+goals: emotional literacy, self-regulation, emotional distance, coping skills
+theories: Narrative therapy (White & Epston externalising), CBT with children (Knell), Winnicott transitional space
+research_tier: 4
+bluey_validated: true
+character_sensitive: true
+character_prompt: What toy or figure does your child already have a relationship with? The spark works best anchored to something they already love.
+
+TRIGGERS
+child_states:
+- overwhelmed by a feeling they cannot name
+- acting out without knowing why
+- scared of their own emotions
+- won't talk about feelings directly
+- jealous of sibling
+- angry without clear trigger
+- sad and withdrawn
+
+parent_goals:
+- help child name their emotions
+- give child distance from overwhelming feelings
+- open conversation about feelings without pressure
+- build emotional vocabulary
+- help child feel less alone with big feelings
+
+concepts: emotional literacy, self-awareness, empathy, emotional regulation
+
+NOT_for: children who strongly resist any play, very high distress in the moment — wait until calm first
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 15-30 min
+location: indoor
+props_needed: optional — a doll, stuffed animal, or small figure can hold the feeling
+
+AGE BAND 2-5
+vehicle: object play — a toy or doll becomes the feeling
+parent_role: Co-creator of the character — narrates, asks questions, follows the child's lead
+child_role: Director of the feeling-character — what it wants, what it fears, what would help it
+spark: Use a toy or figure your child already loves. "This bear showed up today and she's feeling really worried about something. What do you think she's worried about?"
+shape:
+  1. Introduce the feeling as a character through an object the child already has
+  2. Let the child define it — what does it look like, feel, want?
+  3. Parent asks questions from genuine curiosity — never leads to answers
+  4. Child finds a way to help the character — this is the processing
+  5. Resolution does not need to be perfect — the character feeling "a little better" is enough
+normalization: At this age children cannot yet reason abstractly about their feelings — but they can project onto a character and explore from a safe distance. The toy holds what they cannot hold yet.
+watch_out: Don't steer the character toward the "right" resolution. If the child makes the bear angrier or more scared, follow it. That is the processing happening, not a problem to redirect.
+
+AGE BAND 6-8
+vehicle: mutual storytelling or drawing — the feeling becomes a character on paper or in a shared story
+parent_role: Co-author — adds to the story, never takes it over
+child_role: Primary author and director of the feeling-character
+spark: "Let's invent the character who lives inside that feeling. What does Worried look like? Draw it or describe it — I'll write it down."
+shape:
+  1. Child designs the feeling-character — appearance, personality, what it wants
+  2. Parent contributes details, asks real questions: "What makes it grow bigger?" "What shrinks it?"
+  3. Together they give the character a story — origin, trigger, what helps
+  4. Optional: child decides what the character needs from them going forward
+normalization: At 6-8, children are developing the capacity to observe their own feelings — but direct questions still feel exposing. Designing a character does the same work with none of the vulnerability.
+watch_out: Don't ask "is this how YOU feel?" during the play. The distance is the point. Let the character be the character. Connection to the child's real experience will happen naturally or later.
+
+COMBINATIONS
+pairs_well_with: emotional-rehearsal, underdog-wins, parent-models-emotional-regulation
+often_leads_to: underdog-wins, emotional-rehearsal
+
+OUTPUT
+produces_take_out: true
+take_out_description: The character the child designs — a drawing or named figure — becomes a real reference point. Keep it somewhere accessible. Next time that feeling shows up: "Worried is back — what does she need today?"
+
+SOURCES
+White & Epston — Narrative Means to Therapeutic Ends
+Knell — Cognitive-Behavioral Play Therapy
+Jørgensen et al., 2024 — Counselling and Psychotherapy Research
+
+
+==========================================
+ARCHETYPE 04 — CHILD EXPERT
+==========================================
+
+id: child-expert
+name: Child Expert
+tagline: The child teaches. The parent is a genuine student.
+
+DEVELOPMENTAL
+goals: knowledge consolidation, language development, confidence, pride, narrative sequencing
+theories: Vygotsky (teaching as highest form of understanding), Protégé effect, Erikson industry vs inferiority
+research_tier: 3
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- low confidence in what they know
+- needs validation of their knowledge
+- excited about a topic or skill
+- wants to show what they can do
+- struggles with self-expression
+- shy in social situations
+
+parent_goals:
+- build confidence
+- encourage self-expression
+- help child consolidate something they have learned
+- strengthen language and storytelling
+- give child a meaningful role
+
+concepts: pride, competence, knowledge, self-expression
+
+NOT_for: processing fear or grief, high emotional distress, child who is shut down and not engaging
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 10-20 min
+location: indoor, outdoor
+props_needed: none — or whatever relates to the child's area of expertise
+
+AGE BAND 2-5
+vehicle: pretend role play — child is the teacher, doctor, or expert professional
+parent_role: Genuinely curious student who asks real questions and gets things wrong
+child_role: Expert who knows everything and must explain it
+spark: "I need to go to the doctor but I'm very nervous. I heard you're the best doctor in the whole city. Can you check if I'm okay?"
+shape:
+  1. Parent establishes their helplessness and the child's expertise
+  2. Parent asks real questions that require the child to think and explain
+  3. Parent gets things wrong — child corrects them
+  4. Parent demonstrates learning — "oh, so that's how it works"
+normalization: When children explain something, they consolidate it more deeply than when they just hear or see it. The parent's genuine curiosity is what drives the learning — not praise afterward.
+watch_out: Ask follow-up questions that genuinely stretch them: "But what happens if...?" "Why does that work?" Don't accept the first answer. A real student always has more questions.
+
+AGE BAND 6-8
+vehicle: real skill teaching or game invention — child teaches a genuine skill or invents a game and sets all the rules
+parent_role: Student or new player who genuinely doesn't know — asks real questions, makes real mistakes
+child_role: Instructor or rule-maker with real authority
+spark: "You know this game way better than I do. Teach me properly — I want to actually get good at it."
+shape:
+  1. Parent positions themselves as genuinely less capable
+  2. Child teaches or explains with real authority
+  3. Parent makes real mistakes — child corrects them with patience
+  4. Parent improves visibly — child sees the impact of their teaching
+normalization: At 6-8 children need experiences of real competence — not pretend competence. Teaching a parent something they genuinely don't know is one of the cleanest ways to deliver that.
+watch_out: Don't fake incompetence at something the child knows you can do. Pick something real. If they taught themselves something on YouTube, you genuinely don't know it as well as they do.
+
+COMBINATIONS
+pairs_well_with: role-reversal, world-building-together, the-inventor
+often_follows: role-reversal
+often_leads_to: the-inventor
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Vygotsky — Mind in Society
+Protégé effect — educational psychology literature
+Drewes & Schaefer — Play Therapy in Middle Childhood
+
+
+==========================================
+ARCHETYPE 05 — EMOTIONAL REHEARSAL
+==========================================
+
+id: emotional-rehearsal
+name: Emotional Rehearsal
+tagline: Playing out something scary or unknown before it happens.
+
+DEVELOPMENTAL
+goals: anxiety reduction, coping skills, preparation, self-efficacy
+theories: Winnicott transitional space, Play therapy (Landreth), CBPT (Knell), Child Life therapeutic play
+research_tier: 5
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- scared of upcoming event
+- anxious about doctor or dentist visit
+- worried about starting school
+- nervous about new sibling
+- frightened of something that might happen
+- avoids talking about an upcoming change
+
+parent_goals:
+- prepare child for upcoming event
+- reduce anticipatory anxiety
+- help child feel ready
+- make the unknown feel familiar
+- give child a sense of control over a scary situation
+
+concepts: courage, preparation, coping, safety
+
+NOT_for: vague or generalised anxiety with no specific trigger, child in acute distress right now
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 15-30 min
+location: indoor
+props_needed: helpful but not required — toy doctor kit, school bag, relevant objects
+
+AGE BAND 2-5
+vehicle: symbolic fantasy play — play out the scenario with toys or roles before it happens
+parent_role: Plays the "other" in the upcoming scenario — doctor, teacher, new sibling — fully and gently
+child_role: Themselves or experimenting with different outcomes and responses
+spark: "Let's play doctors. You come in and I'll be the doctor — tell me what happens."
+shape:
+  1. Set up the scenario loosely — let the child enter it at their own pace
+  2. Parent plays the other role without exaggerating fear or false cheerfulness
+  3. Child controls what happens — let them replay it, change the outcome, make it go badly and try again
+  4. If they make it scary, stay in it — resolution does not need to be neat
+normalization: Playing out a feared event before it happens is one of the most well-evidenced things a parent can do. The child is rehearsing coping in a space where nothing is at stake — including the option to fail and try again.
+watch_out: Don't steer toward a happy ending. If the child makes the doctor scary or mean, follow it. They are exploring the fear, not being traumatised by it. Intervene only if they become genuinely distressed.
+
+AGE BAND 6-8
+vehicle: realistic role play of the actual scenario, physical play that cycles the feared dynamic, or bibliotherapy
+parent_role: Scene partner in role play, safe base in physical play, or co-reader in bibliotherapy
+child_role: Themselves or a slightly distanced version — experimenting with responses
+spark options:
+  Role play: "Let's run through exactly what happens at the dentist — I'll be the dentist, you be you. Stop me if anything feels wrong."
+  Physical: "Every time I leave the room you have a mission to complete before I come back. Let's see how many you can do."
+  Bibliotherapy: Find a book where a character the same age faces the same fear — read it together, then ask what the character could try.
+shape:
+  1. Choose the vehicle that fits the child's style
+  2. Run through the scenario once — let it be imperfect
+  3. Child adjusts, tries a different response, or asks to run it again
+  4. After: "What would make that feel easier?" — one question, not a debrief
+normalization: Anxiety about real upcoming events is normal and healthy — it means the child is taking the event seriously. Play lets them run the situation safely before the stakes are real.
+watch_out: For the physical play vehicle — don't explain what you're doing. "We're going to practice you being okay when I leave" kills it. Just play the mission game. The learning is in the experience, not the explanation.
+
+COMBINATIONS
+pairs_well_with: feelings-as-characters, underdog-wins, parent-models-emotional-regulation
+often_leads_to: underdog-wins
+
+OUTPUT
+produces_take_out: true
+take_out_description: A coping phrase or action the child invented during play — "what the character said to themselves" — that can be used in the real situation.
+
+SOURCES
+Winnicott — Playing and Reality
+Child Life evidence base — American Academy of Pediatric Child Life Professionals
+RCT — Dental anxiety, Scientific Reports 2026
+Knell — CBPT
+
+
+==========================================
+ARCHETYPE 06 — UNDERDOG WINS
+==========================================
+
+id: underdog-wins
+name: Underdog Wins
+tagline: The smaller, less powerful character persists and succeeds.
+
+DEVELOPMENTAL
+goals: resilience, frustration tolerance, self-belief, persistence
+theories: Erikson initiative vs guilt / industry vs inferiority, Grotberg resilience framework, narrative identity formation
+research_tier: 4
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- gives up easily
+- says "I can't do it" before trying
+- collapses when things are hard
+- compares themselves unfavourably to others
+- scared of failure
+- low resilience after setbacks
+
+parent_goals:
+- build resilience
+- help child tolerate frustration
+- strengthen self-belief
+- show child that struggle leads somewhere
+- help child recover from a recent failure or setback
+
+concepts: resilience, persistence, courage, overcoming
+
+NOT_for: child already in a shame spiral (stabilise first), acute fear scenarios
+
+CONTEXT
+energy_levels: medium, high
+time_needed: 15-30 min
+location: indoor, outdoor
+props_needed: minimal — whatever suits the challenge
+
+AGE BAND 2-5
+vehicle: narrative play — the child's character faces an obstacle that seems impossible and finds a way
+parent_role: The obstacle, doubter, or large force — genuinely challenging, eventually overcome
+child_role: The small but capable one — the underdog
+spark: "The giant says the little mouse could NEVER get past the gate. Everyone knows it. But the mouse has an idea..."
+shape:
+  1. Establish the odds against the child's character clearly — make it feel real
+  2. The first attempt fails — don't shortcut to success
+  3. Child finds a creative or persistent path through
+  4. The win comes after real struggle — celebrate the effort, not just the result
+normalization: Children between 3 and 6 are building their inner narrative about whether they are capable. Stories where small and determined wins against big and powerful wire that narrative at a deep level.
+watch_out: The struggle is the point. If you let the child win too easily, the story loses its power. Hold the obstacle firm for long enough that the win feels genuinely earned.
+
+AGE BAND 6-8
+vehicle: physical or competitive challenge with a genuine skill gap — child finds a way to win through strategy
+parent_role: Genuine stronger opponent who competes fully but is beatable through the right approach
+child_role: The one who finds the strategy, the angle, the unexpected move
+spark: "I'm stronger and faster. But there's always a way to beat someone stronger. Figure it out."
+shape:
+  1. Establish a real physical or game challenge where parent has genuine advantage
+  2. Child tries direct approaches — they don't work
+  3. Child experiments with strategy, angles, rules
+  4. Child finds the approach that works — parent is genuinely beaten by it
+normalization: At 6-8, children are constantly measuring themselves against the world and finding themselves smaller. Experiences of winning through cleverness rather than just strength build a resilience that lasts.
+watch_out: Don't hint at the strategy. Let them find it. The moment of discovery is the developmental event — not the win itself.
+
+COMBINATIONS
+pairs_well_with: mundane-mission, resilience-through-struggle, emotional-rehearsal
+often_follows: feelings-as-characters, emotional-rehearsal
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Erikson — Childhood and Society
+Grotberg Resilience Framework
+Smith, Bohl & Bolling — Oh, Biscuits! CQUniversity 2025
+
+
+==========================================
+ARCHETYPE 07 — WORLD-BUILDING TOGETHER
+==========================================
+
+id: world-building-together
+name: World-Building Together
+tagline: Parent and child co-create a shared world with its own rules.
+
+DEVELOPMENTAL
+goals: creativity, negotiation, collaborative thinking, feeling genuinely heard
+theories: Piaget symbolic play, Vygotsky ZPD in social play, Root-Bernstein paracosm research
+research_tier: 4
+bluey_validated: false
+
+TRIGGERS
+child_states:
+- needs to feel their ideas matter
+- highly imaginative but plays alone
+- struggles to collaborate with others
+- wants more connection with parent
+- creative and needs an outlet
+- has a rich inner world they don't share
+
+parent_goals:
+- deepen connection
+- encourage creativity
+- give child experience of their ideas being taken seriously
+- build collaborative skills
+- simply play with no agenda
+
+concepts: creativity, collaboration, expression, connection
+
+NOT_for: acute emotional distress, child who needs structure (too open-ended)
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 20-45 min
+location: indoor
+props_needed: lego, blocks, drawing materials, or purely verbal
+
+AGE BAND 2-5
+vehicle: open-ended verbal or toy-based world — rules emerge, characters get assigned
+parent_role: Equal co-creator — adds without redirecting, says yes to everything, never takes over
+child_role: Primary architect — their ideas set the direction
+spark: "We're going to build a world that has never existed before. You decide what lives there."
+shape:
+  1. Child establishes the world — what's in it, what the rules are
+  2. Parent adds details and asks genuine questions: "What happens when it rains here?"
+  3. Characters emerge and are given roles — parent follows the child's casting
+  4. The world grows — no resolution needed, the building is the point
+normalization: Children who engage in rich world-building play show stronger creative abilities, empathy, and social cognition years later. The parent's genuine engagement — not just presence — is what makes this developmental rather than just fun.
+watch_out: Resist steering the world toward a story that makes sense to you. A world where gravity works backwards and animals speak only in questions is perfect. Your job is to be a committed citizen of whatever they build.
+
+AGE BAND 6-8
+vehicle: physical building — lego, construction, maps, minecraft-logic
+parent_role: Co-builder with real contributions — not just watching
+child_role: Lead architect with decision-making authority
+spark: "We're building something together that actually works. You're the lead architect. Tell me what we're building and I'll build my section under your direction."
+shape:
+  1. Child sets the vision and assigns roles
+  2. Both build — parent's section must meet the child's specs
+  3. Decisions happen collaboratively — genuine negotiation when there is disagreement
+  4. The built thing is real — it persists after the session
+normalization: At 6-8 children are forming their identity as thinkers and makers. Having a parent take their design vision seriously — and genuinely follow it — is deeply affirming in a way praise alone cannot be.
+watch_out: Don't take over when your instinct is to "improve" something. Even if their design is inefficient, it is theirs. Ask before changing anything in your section.
+
+COMBINATIONS
+pairs_well_with: child-expert, the-inventor, parallel-narration
+often_leads_to: the-inventor, child-expert
+
+OUTPUT
+produces_take_out: true
+take_out_description: The world they built — physical or documented — that can be returned to across sessions. Photograph it before it comes apart. Continuity deepens the investment and the developmental value.
+
+SOURCES
+Root-Bernstein — Inventing Imaginary Worlds
+ScienceDaily/AAU 2018 — creativity and imaginary world play
+Piaget — Play, Dreams and Imitation in Childhood
+
+
+==========================================
+ARCHETYPE 08 — THE REPAIR
+==========================================
+
+id: the-repair
+name: The Repair
+tagline: Something breaks and they fix it together.
+
+DEVELOPMENTAL
+goals: conflict resolution, emotional repair, relationship trust, problem-solving
+theories: Attachment theory (rupture and repair cycles), Narrative therapy, Winnicott
+research_tier: 2
+bluey_validated: false
+
+TRIGGERS
+child_states:
+- believes broken things stay broken
+- holds grudges
+- shuts down after conflict
+- doesn't know how to repair after a fight
+- recently had a falling-out with a friend or sibling
+- anxious that mistakes are permanent
+
+parent_goals:
+- teach conflict resolution
+- show child that repair is possible
+- help child recover from a real falling-out
+- model that broken things including relationships can be fixed
+- build emotional repair skills
+
+concepts: forgiveness, repair, resilience in relationships, problem-solving
+
+NOT_for: acute conflict in the moment (wait until regulated), child under 3
+
+CONTEXT
+energy_levels: low
+time_needed: 15-20 min
+location: indoor
+props_needed: none, or minimal — small figures help at 2-5
+
+AGE BAND 2-5
+vehicle: story play — something breaks in the play world and they find a way to fix it
+parent_role: Co-problem-solver — sometimes the one who caused the break
+child_role: Collaborator in the fix, sometimes the one who initiates repair
+spark: "Oh no — these two friends had a big fight and now they're not talking. How do they fix it? Can we help them?"
+shape:
+  1. A relationship or object in the play world breaks — make it feel real
+  2. Both characters feel the loss — don't rush to resolution
+  3. Child and parent work out together how repair could happen
+  4. Repair is attempted — and celebrated, even if imperfect
+normalization: Children between 3 and 5 are learning that conflict doesn't end relationships. Experiencing the full arc — break, discomfort, repair — in play builds the internal belief that broken things can be fixed.
+watch_out: Don't resolve it too quickly. Sit in the discomfort of the break for a moment. That discomfort is what makes the repair meaningful.
+
+AGE BAND 6-8
+vehicle: real-time repair within a game — the game goes wrong, they work it out together
+parent_role: Equal participant in the breakdown and the repair
+child_role: Co-problem-solver — equal voice in how to fix it
+spark: Start a competitive game, let something go genuinely wrong mid-game — a disputed call, a moment of frustration — and work it out together rather than stopping.
+shape:
+  1. Play a real game with genuine stakes
+  2. Something breaks — friction, accusation, frustration — let it be real
+  3. Parent models naming it: "I think we both got frustrated there. How do we fix this?"
+  4. They work out a repair together — the game continues
+normalization: At 6-8 children are navigating real social complexity with peers. Experiencing repair with a parent — in a real moment of friction — gives them the template for doing it with friends.
+watch_out: Don't manufacture conflict artificially — children this age will feel it. Let real friction emerge naturally from genuine competitive play. It always does.
+
+COMBINATIONS
+pairs_well_with: parent-models-emotional-regulation, resilience-through-struggle, feelings-as-characters
+often_follows: silly-spiral, underdog-wins
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Attachment theory — Bowlby, Ainsworth
+White & Epston — Narrative Means to Therapeutic Ends
+Freeman, Epston, Lobovits — Playful Approaches to Serious Problems
+
+
+==========================================
+ARCHETYPE 09 — PARALLEL NARRATION
+==========================================
+
+id: parallel-narration
+name: Parallel Narration
+tagline: Parent narrates the child's play — the child is witnessed.
+
+DEVELOPMENTAL
+goals: language development, self-awareness, feeling seen, vocabulary building
+theories: DIR/Floortime (Greenspan), Hart & Risley language input research, Parallel talk in speech-language pathology
+research_tier: 3
+bluey_validated: false
+
+TRIGGERS
+child_states:
+- playing alone and seems disconnected
+- limited language or vocabulary
+- needs connection but not ready to engage directly
+- quiet and withdrawn
+- parent wants to join but child isn't inviting them
+
+parent_goals:
+- build connection with low-engagement child
+- support language development
+- join child's play without disrupting it
+- give child experience of being genuinely seen
+- no specific goal — just be present
+
+concepts: connection, language, being seen, presence
+
+NOT_for: child who finds commentary intrusive — read the child's response and stop if they pull away
+
+CONTEXT
+energy_levels: low, medium, high
+time_needed: 5-20 min
+location: indoor, outdoor
+props_needed: none — whatever the child is already playing with
+
+AGE BAND 2-5
+vehicle: verbal narration of child's self-directed play — like a nature documentary
+parent_role: Observer and narrator — never director, never redirects
+child_role: The one being witnessed — continues their own play
+spark: Sit near your child while they play and narrate quietly: "And now the lion is approaching the castle... the knight doesn't seem worried..."
+shape:
+  1. Parent sits nearby without entering the play
+  2. Narrates what the child is doing and what might be happening — descriptive, curious, never evaluative
+  3. Follows the child's energy — speeds up with excitement, slows down with focus
+  4. No agenda, no story arc — just witnessing
+normalization: Children acquire vocabulary fastest when language is mapped onto what they are already focused on. Parallel narration does this naturally — but more than language, it gives children the profound experience of a parent's full attention without any demand attached.
+watch_out: Don't evaluate ("good job", "that's so smart") — describe. "The red block is going on top of the blue one" is more powerful than "wow, great building." Evaluation shifts attention to the parent's judgment. Description keeps it on the child's action.
+
+AGE BAND 6-8
+vehicle: sports commentary during physical play, a game, or a build
+parent_role: Commentator — enthusiastic, specific, genuinely watching
+child_role: The athlete, the builder, the competitor being covered
+spark: "And he lines up for the shot... the crowd holds its breath... this could be the one..."
+shape:
+  1. Child is doing something physical or constructive
+  2. Parent provides live commentary — specific, present, genuinely tracking what is happening
+  3. Commentary escalates with the action
+  4. Optional: child can interview themselves post-play — parent plays reporter
+normalization: At 6-8 children crave being seen as capable and interesting. A parent who watches closely enough to commentate specifically — not generically — sends a powerful message about the child's worth.
+watch_out: Keep it specific. "Amazing!" means nothing. "He waited until the last second to change direction — that's what made it work" means everything. Specificity is proof you were actually watching.
+
+COMBINATIONS
+pairs_well_with: world-building-together, silly-spiral, resilience-through-struggle
+often_leads_to: world-building-together
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Greenspan & Wieder — DIR/Floortime
+Hart & Risley — Meaningful Differences in Everyday Experiences
+Lansbury — speech-language parallel talk literature
+
+
+==========================================
+ARCHETYPE 10 — THE OBSTACLE THAT TEACHES
+==========================================
+
+id: obstacle-that-teaches
+name: The Obstacle That Teaches
+tagline: The concept the child needs to learn is embedded as a problem in the play.
+
+DEVELOPMENTAL
+goals: concept learning through experience, moral reasoning, social understanding, executive function
+theories: Piaget (learning through active experience not instruction), Vygotsky ZPD, CBPT (Knell)
+research_tier: 5
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- struggles with sharing
+- doesn't understand fairness yet
+- impatient — cannot wait their turn
+- hits when frustrated
+- doesn't grasp cause and effect
+- needs to understand a concept they keep resisting
+
+parent_goals:
+- teach sharing without lecturing
+- help child understand fairness
+- build patience and turn-taking
+- teach cause and effect
+- embed a concept that direct teaching hasn't landed
+
+concepts: fairness, sharing, patience, cause and effect, empathy, cooperation
+
+NOT_for: emotional processing, fear-based scenarios (concept must be the target, not emotion)
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 15-30 min
+location: indoor
+props_needed: depends on concept — often simple household objects work well
+
+AGE BAND 2-5
+vehicle: narrative play where the concept appears as a plot problem the child must solve
+parent_role: Play partner who presents the problem without solving it — holds the situation open
+child_role: Problem-solver who invents the solution organically
+spark: For sharing: "These two characters both want the only magic stone. There's only one. What do they do?" — then follow whatever the child invents.
+shape:
+  1. Design the scenario so the concept IS the central problem — not a side issue
+  2. Present the problem clearly, then step back
+  3. Let the child struggle with it — don't hint at the right answer
+  4. Celebrate the solution they invent, whatever it is
+  5. Never name the concept during or after — "you just taught them to share" ruins it
+normalization: Children between 3 and 6 cannot learn abstract concepts through instruction — their brains are not built for it yet. But they can discover the same concept through experience and it lands permanently. This is Piaget's central insight.
+watch_out: Never name the lesson during or after play. The moment you say "see, that's what sharing means" the child knows they were being taught and the experience closes. Let it land without translation.
+
+AGE BAND 6-8
+vehicle: a game with rules that embeds the concept as a mechanic
+parent_role: Game designer (before) and genuine player (during)
+child_role: Player who navigates the rules — and discovers the concept through playing by them
+spark: For fairness: invent a resource-allocation game where players must distribute something limited between multiple needs — no pre-set right answer built in.
+shape:
+  1. Design the game so the concept is a structural element — not an add-on
+  2. Play it genuinely — let real friction emerge
+  3. When the concept surfaces as tension in the game, let it stay there
+  4. After: "What made that hard?" — one question, open, not leading
+normalization: At 6-8 children are developing genuine moral reasoning — but it needs to be tested in real situations, not taught in lectures. A game that creates real stakes around a concept gives them the experiential data their reasoning needs.
+watch_out: Don't build the "right answer" into the game design. The tension of genuine uncertainty — "what IS fair here?" — is where the learning lives.
+
+COMBINATIONS
+pairs_well_with: mundane-mission, world-building-together, the-repair
+often_leads_to: the-repair
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Piaget — The Moral Judgment of the Child
+Vygotsky — Mind in Society
+Knell — CBPT
+
+
+==========================================
+ARCHETYPE 11 — THE SILLY SPIRAL
+==========================================
+
+id: silly-spiral
+name: The Silly Spiral
+tagline: Pure nonsense play that escalates. No agenda.
+
+DEVELOPMENTAL
+goals: connection, joy, emotional release, relationship repair
+theories: Stuart Brown (play as biological process), Cohen (giggling as emotional release), Solter (laughter and healing)
+research_tier: 3
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- disconnected from parent
+- wound up and needs release
+- after a hard day
+- tension between parent and child
+- needs to just laugh
+
+parent_goals:
+- reconnect quickly
+- release tension
+- repair after conflict
+- just play with no purpose
+
+concepts: joy, connection, release
+
+NOT_for: child in acute distress — stabilise first
+
+CONTEXT
+energy_levels: medium, high
+time_needed: 5-15 min
+location: indoor, outdoor
+props_needed: none — or pillows, cushions for physical versions
+
+AGE BAND 2-5
+vehicle: escalating nonsense — verbal and physical absurdity that builds
+parent_role: Willing participant in complete ridiculousness — no dignity preserved
+child_role: Co-escalator — adds to the silliness
+spark: Announce that from now on everyone must walk backwards and talk in made-up words. See what happens.
+shape:
+  1. Parent initiates something absurd
+  2. Child escalates
+  3. Parent escalates further
+  4. Both are fully in it — wherever it goes
+normalization: Sometimes the most developmentally valuable play is the one with absolutely no lesson. Pure joy shared with a parent is itself the developmental event — it builds the secure base everything else rests on.
+watch_out: Don't let it escalate into genuine roughness without monitoring. The silliness should feel safe and contained. If it tips into overstimulation, a calm anchor word brings it back.
+
+AGE BAND 6-8
+vehicle: roughhousing, pillow fights, physical comedy — full-contact silly
+parent_role: Fully committed physical participant — not supervising, actually playing
+child_role: Equal physical player
+spark: Announce that this is now a no-rules pillow fight and anyone who laughs first loses. Then make sure they laugh first.
+shape:
+  1. Start physical and silly
+  2. Let it escalate naturally
+  3. Parent loses gracefully and repeatedly
+  4. Stop while it is still fun — before overstimulation
+normalization: Laughter during physical rough-and-tumble play is emotional material being safely processed. It is not just fun — it is release. Especially valuable after hard days or tension.
+watch_out: Stop before it tips. The sign of overstimulation is when laughter shifts to real frustration or tears. Build in a natural wind-down — a silly "championship ceremony" or collapsing dramatically signals the end.
+
+COMBINATIONS
+pairs_well_with: role-reversal, parallel-narration, the-repair
+often_leads_to: role-reversal
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Stuart Brown — Play
+Cohen — Playful Parenting
+Solter — Tears and Tantrums
+
+
+==========================================
+ARCHETYPE 12 — TIME TRAVEL / TINY WORLD
+==========================================
+
+id: time-travel-tiny-world
+name: Time Travel / Tiny World
+tagline: Shifting perspective by changing scale or era.
+
+DEVELOPMENTAL
+goals: perspective-taking, empathy, curiosity, flexible thinking
+theories: Piaget symbolic play, Theory of mind development, Sandplay (Lowenfeld, Kalff)
+research_tier: 3
+bluey_validated: false
+
+TRIGGERS
+child_states:
+- rigid in their thinking
+- struggles to see another's point of view
+- highly curious and imaginative
+- needs a new angle on something they are stuck on
+
+parent_goals:
+- build empathy
+- open up perspective-taking
+- channel strong imagination
+- approach a topic from an unexpected angle
+
+concepts: empathy, perspective, curiosity, history, scale
+
+NOT_for: child needing emotional processing — too conceptual
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 15-30 min
+location: indoor
+props_needed: optional — small figures, lego, drawing materials
+
+AGE BAND 2-5
+vehicle: pure fantasy — shrinking down, going to another time or world
+parent_role: Fellow tiny explorer in the new world
+child_role: Guide or co-explorer
+spark: "We just shrank to the size of a grape. Everything around us is now enormous. What do we do?"
+shape:
+  1. Establish the shift in scale or time together
+  2. Explore what is different from this new perspective
+  3. Meet the inhabitants — what do they think of us?
+  4. Find a way back — or decide to stay
+normalization: Shifting scale and perspective in play directly exercises the same cognitive muscles as taking another person's point of view. This is literal perspective-taking practice.
+watch_out: Let the child define the rules of the new world. If ants speak French and use teacups as vehicles, that is correct. Don't impose logic.
+
+AGE BAND 6-8
+vehicle: sand tray with miniature figures, scale models, or alternate-reality roleplay grounded in real contexts
+parent_role: Co-explorer with genuine questions and no predetermined destination
+child_role: Architect of the perspective shift
+spark: "Build a scene in the sand or with figures that shows what our street looked like 200 years ago. What's the same? What's completely different?"
+shape:
+  1. Child sets the world — real historical, future, or scaled-down
+  2. Both explore it from inside
+  3. Genuine questions about difference and similarity
+  4. Optional: what would we need to know or do to survive there?
+normalization: At 6-8 children are developing the capacity for genuine historical and social perspective-taking. This archetype exercises that capacity through concrete, physical play rather than abstract discussion.
+watch_out: Don't turn it into a history lesson. Questions like "what do you think people worried about then?" are generative. "Actually, in the 1800s they..." is a lecture.
+
+COMBINATIONS
+pairs_well_with: world-building-together, child-expert, obstacle-that-teaches
+
+OUTPUT
+produces_take_out: true
+take_out_description: A sand tray scene or physical model they built — photograph it and return to it in a future session.
+
+SOURCES
+Lowenfeld — World Technique
+Kalff — Sandplay
+Piaget — Play, Dreams and Imitation
+
+
+==========================================
+ARCHETYPE 13 — THE ANIMAL FAMILY
+==========================================
+
+id: animal-family
+name: The Animal Family
+tagline: Everyone is an animal. Family dynamics play out with distance.
+
+DEVELOPMENTAL
+goals: emotional expression through projection, family dynamic exploration, empathy, identity
+theories: Projective play (play therapy tradition), Narrative therapy, Attachment theory
+research_tier: 3
+bluey_validated: false
+character_sensitive: true
+character_prompt: For 6-8, what show, game, or world is the child currently into? This archetype needs an anchor the child already cares about.
+
+TRIGGERS
+child_states:
+- navigating complex family dynamics
+- new sibling arriving
+- parents separating
+- needs to express something about family but cannot say it directly
+- processes family feelings through play
+
+parent_goals:
+- understand what child is feeling about family
+- open conversation about family change
+- give child distance to explore family feelings safely
+
+concepts: family, belonging, change, roles, identity
+
+NOT_for: 6-8 age band unless anchored in something the child already loves — too babyish as generic animals
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 15-30 min
+location: indoor
+props_needed: animal figures or stuffed animals helpful but not required
+
+AGE BAND 2-5
+vehicle: pure animal family play — everyone is assigned an animal species and family role
+parent_role: Whichever family member the child assigns — played fully and without question
+child_role: Casting director and primary player
+spark: "We're a family of foxes. Who is who? What do foxes do in the morning?"
+shape:
+  1. Child assigns all roles — follow the casting exactly
+  2. Play out a family scenario — meal, bedtime, outing
+  3. Note what themes emerge — what the child makes happen — without directing
+  4. Let it run as long as the child wants
+normalization: The distance of "I'm the baby bear" makes it safe for children to voice feelings about family that feel too exposing to say directly. What the child makes happen in the animal family is often a direct window into their inner experience.
+watch_out: Don't interpret out loud. If the baby bear gets left out repeatedly, don't say "is that how you feel?" The distance is what makes it safe. Closing it shuts the play down.
+
+AGE BAND 6-8
+vehicle: character-based play anchored in something the child loves — a game, show, or world they are already invested in
+parent_role: Character assigned by the child — played with genuine commitment
+child_role: Casting director and primary player
+spark: "We're characters from [Minecraft / their favourite show / a game they play]. Which character is which family member? What situation are we in?"
+shape:
+  1. Child selects the world and casts the characters
+  2. Family dynamics play out through that world's logic
+  3. Parent commits fully to the character — not to parental instincts
+  4. Themes that emerge are noted quietly — not addressed during play
+normalization: At 6-8, generic animal play feels babyish — but projective play through beloved characters still does the same emotional work. The child needs a container that feels sophisticated enough to invest in.
+watch_out: This archetype requires knowing what the child is currently into. Generic suggestions will be rejected. If you don't know — ask before the play session, not during.
+
+COMBINATIONS
+pairs_well_with: feelings-as-characters, emotional-rehearsal, the-repair
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Projective play therapy tradition
+Attachment Story Completion Task (ASCT)
+White & Epston — Narrative Therapy
+
+
+==========================================
+ARCHETYPE 14 — THE NEW KID
+==========================================
+
+id: the-new-kid
+name: The New Kid
+tagline: Safe practice for real social situations.
+
+DEVELOPMENTAL
+goals: social skills, empathy, belonging, handling rejection, friendship building
+theories: Social learning theory (Bandura), CBPT behavioural rehearsal, Erikson industry vs inferiority
+research_tier: 4
+bluey_validated: false
+
+TRIGGERS
+child_states:
+- starting a new school or class
+- struggling to make friends
+- was left out or excluded
+- shy in social situations
+- doesn't know how to join a group
+- had a friendship fall apart
+
+parent_goals:
+- prepare child for new social environment
+- practice joining groups
+- help child recover from social rejection
+- build social confidence
+- teach empathy for others who are new or left out
+
+concepts: friendship, belonging, inclusion, social confidence, empathy
+
+NOT_for: child in acute social distress — stabilise first
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 15-25 min
+location: indoor
+props_needed: none
+
+AGE BAND 2-5
+vehicle: fantasy role play — parent plays other children, child practices joining
+parent_role: A group of children playing — sometimes welcoming, sometimes not immediately
+child_role: The new kid trying to join
+spark: "These children are playing a game and you want to join. How do you ask?"
+shape:
+  1. Parent plays a group of children already mid-play
+  2. Child approaches and tries to join — with genuine mild friction
+  3. Parent adjusts the welcome based on what the child does
+  4. Child finds a way in — practice different approaches
+normalization: Social entry is one of the hardest skills for young children and one of the most important. Practicing it in play — where rejection has no real cost — is exactly how resilient social skills get built.
+watch_out: Don't make it too easy. Some gentle friction ("we're already playing a game") is what makes the practice real. An immediately welcoming group teaches nothing.
+
+AGE BAND 6-8
+vehicle: realistic role play of an actual upcoming or recent social situation
+parent_role: The peer, the group, the teacher — whoever is in the scenario
+child_role: Themselves — practicing real responses
+spark: "Tell me exactly what happened. Now let's run it again — this time you can try anything different."
+shape:
+  1. Child describes the real social situation in detail
+  2. Parent plays the other party as accurately as possible
+  3. Child tries different approaches — parent responds authentically
+  4. Child identifies what felt better and why
+normalization: At 6-8 social rejection is genuinely painful and genuinely important. This isn't dramatic play anymore — it is rehearsal for real situations. The parent is a safe sparring partner.
+watch_out: Don't play the other child more kindly than they actually were. Accurate friction is what makes the rehearsal useful. A sanitised version doesn't prepare them for the real situation.
+
+COMBINATIONS
+pairs_well_with: emotional-rehearsal, underdog-wins, obstacle-that-teaches
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Bandura — Social Learning Theory
+Knell — CBPT behavioural rehearsal
+Drewes & Schaefer — Play Therapy in Middle Childhood
+
+
+==========================================
+ARCHETYPE 15 — THE INVENTOR
+==========================================
+
+id: the-inventor
+name: The Inventor
+tagline: The child builds something new and the parent takes it completely seriously.
+
+DEVELOPMENTAL
+goals: creative confidence, divergent thinking, self-expression, initiative
+theories: Erikson initiative vs guilt, Piaget constructivism, Csikszentmihalyi (flow)
+research_tier: 3
+bluey_validated: false
+
+TRIGGERS
+child_states:
+- highly creative but doesn't feel taken seriously
+- needs an outlet for ideas
+- low creative confidence
+- told their ideas "won't work" too often
+- perfectionist who won't try
+
+parent_goals:
+- build creative confidence
+- encourage initiative
+- give child experience of ideas being valued
+- help child take creative risks
+
+concepts: creativity, initiative, confidence, self-expression
+
+NOT_for: child needing emotional processing, acute distress
+
+CONTEXT
+energy_levels: low, medium
+time_needed: 20-40 min
+location: indoor
+props_needed: paper, craft materials, lego, or whatever is available
+
+AGE BAND 2-5
+vehicle: invention play — child creates a magical object or creature and parent is the amazed audience
+parent_role: Investor, buyer, or audience who asks genuine questions and never says "that wouldn't work"
+child_role: Inventor — all decisions, all specifications
+spark: "You've just invented something the world has never seen. Show me what it does."
+shape:
+  1. Child invents and demonstrates
+  2. Parent asks real questions: "What happens if you use it twice in one day?" "Who needs this most?"
+  3. Parent proposes a "problem" the invention might solve
+  4. Child refines and adds features
+normalization: The parent's genuine curiosity is the entire intervention. When a child's ideas are met with real questions rather than praise or correction, they learn that their imagination has value.
+watch_out: Never say "that's not how it would really work." There is no "really" in this play. Every question you ask should come from inside the invention's logic, not from outside it.
+
+AGE BAND 6-8
+vehicle: real invention — child designs an actual game, object, recipe, or system
+parent_role: Investor, client, or evaluator — takes it seriously, asks hard questions, expects it to actually work
+child_role: Designer and builder with real accountability
+spark: "You have 30 minutes to invent a game that two people can play with only what's in this room. It has to have rules, a way to win, and a reason it's fun."
+shape:
+  1. Child designs with real constraints
+  2. Parent is a genuine client — asks critical questions: "What if I do this?" "Is that fair?"
+  3. Child iterates based on real feedback
+  4. They play the invented game together — and the feedback is real
+normalization: At 6-8 creative confidence either gets established or starts to erode. Children who experience their ideas taken seriously — tested, refined, played — develop the belief that their thinking is worth investing in.
+watch_out: Give real feedback, not just praise. "That rule doesn't quite work because..." followed by "how would you fix it?" is far more respectful than "amazing idea!" It treats them as a real designer.
+
+COMBINATIONS
+pairs_well_with: child-expert, world-building-together, obstacle-that-teaches
+often_follows: child-expert
+
+OUTPUT
+produces_take_out: true
+take_out_description: The invented game, recipe, or object — real and usable beyond the session. Write the rules down together before the session ends.
+
+SOURCES
+Erikson — Childhood and Society
+Csikszentmihalyi — Flow
+Root-Bernstein — Sparks of Genius
+
+
+==========================================
+ARCHETYPE 16 — PARENT MODELS EMOTIONAL REGULATION
+==========================================
+
+id: parent-models-emotional-regulation
+name: Parent Models Emotional Regulation
+tagline: The parent has a feeling during play — and the child watches them work through it.
+
+DEVELOPMENTAL
+goals: emotional regulation, self-regulation, resilience modelling, emotional vocabulary
+theories: Bandura social learning theory, Winnicott good enough parenting, Grotberg resilience (I have — caring adults who model)
+research_tier: 5
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- doesn't know how to handle their own big feelings
+- collapses or explodes when frustrated
+- has never seen an adult process a feeling out loud
+- watches parent carefully for how to react
+
+parent_goals:
+- model emotional regulation in the moment
+- show child that feelings are manageable
+- give child a template for handling frustration or disappointment
+- build family emotional vocabulary
+
+concepts: emotional regulation, self-control, resilience, emotional literacy
+
+NOT_for: manufacturing emotion — must be genuine. Only works when a real feeling arises during play.
+
+CONTEXT
+energy_levels: low, medium, high
+time_needed: any — this is a moment within a session, not a full session
+location: indoor, outdoor
+props_needed: none
+
+AGE BAND 2-5
+vehicle: in-play moment — parent's character experiences a feeling and visibly works through it
+parent_role: The character who has the feeling — names it, processes it, continues
+child_role: Witness. Sometimes asks what's wrong. Sometimes the one who triggered it in the story.
+spark: This is not a session you design — it is a moment you create space for. When you lose a round, miss a target, or the play doesn't go your way — name it out loud inside the story: "Oh — the wizard is really frustrated right now. That didn't work at all. I need a moment."
+shape:
+  1. Feeling arises genuinely in play
+  2. Parent names it simply and clearly inside the fiction
+  3. Parent pauses — doesn't immediately fix or suppress
+  4. Parent recovers and continues — the story goes on
+normalization: Children don't learn emotional regulation from being told to calm down. They absorb it from watching someone they trust do it in real time. The play container makes it safe and observable — low stakes, high learning.
+watch_out: Don't perform it. Children can feel manufactured emotion and it teaches the wrong thing — that feelings are theatrical. Only use this when a real feeling arises during play.
+
+AGE BAND 6-8
+vehicle: in-game moment — parent gets genuinely frustrated during a competitive game and names it
+parent_role: Real player who has real reactions and chooses to name and process them
+child_role: Witness — sometimes the cause of the frustration through legitimate competitive play
+spark: When you miss, lose, or get beaten in a way that genuinely stings: "Okay — I'm actually annoyed. That's annoying. Give me two seconds." Then continue.
+shape:
+  1. Genuine frustration or disappointment arises during real play
+  2. Parent names it simply: "I'm frustrated" or "that's disappointing"
+  3. Parent pauses without suppressing or exploding
+  4. Parent returns to the game — models that the feeling passed
+normalization: At 6-8 children are navigating real competition, real failure, and real frustration daily. Watching a parent name a feeling and recover during a real competitive game gives them the exact template they need.
+watch_out: Don't over-process. Name it, pause, continue. The simplicity is the model.
+
+COMBINATIONS
+pairs_well_with: the-repair, resilience-through-struggle, feelings-as-characters
+often_leads_to: the-repair
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Bandura — Social Learning Theory
+Rutledge — Psychology Today March 2025
+Smith et al. — Oh Biscuits, CQUniversity 2025
+Winnicott — The Maturational Processes
+
+
+==========================================
+ARCHETYPE 17 — RESILIENCE THROUGH STRUGGLE
+==========================================
+
+id: resilience-through-struggle
+name: Resilience Through Struggle
+tagline: The play hits a real wall. The child sits with it. The parent doesn't rescue.
+
+DEVELOPMENTAL
+goals: frustration tolerance, perseverance, resilience, self-reliance
+theories: Grotberg Resilience Framework (I can), Erikson industry vs inferiority, Sandseter (adventurous play and anxiety inoculation)
+research_tier: 5
+bluey_validated: true
+
+TRIGGERS
+child_states:
+- collapses when something is hard
+- demands help immediately
+- gives up at first obstacle
+- low frustration tolerance
+- afraid of failure
+- never gets to sit with difficulty
+
+parent_goals:
+- build genuine resilience
+- help child tolerate difficulty without collapsing
+- reduce rescuing reflex
+- teach child they can handle hard things
+- build frustration tolerance over time
+
+concepts: resilience, perseverance, frustration tolerance, self-reliance
+
+NOT_for: child already in distress (must be a contained challenge, not a real crisis), child with very low window of tolerance (start very small)
+
+CONTEXT
+energy_levels: medium, high
+time_needed: 15-30 min
+location: indoor, outdoor — physical challenges work especially well
+props_needed: depends — physical challenge may need equipment, game challenge needs game
+
+AGE BAND 2-5
+vehicle: narrative play where resolution is deliberately withheld — the story sits in difficulty
+parent_role: Holds the space without rescuing — present, warm, not fixing
+child_role: The one who experiences difficulty and finds their own path through
+spark: Set up a story where the character faces a genuine obstacle — and when the child tries the first obvious solution, it doesn't work. Wait.
+shape:
+  1. Obstacle is introduced — real within the story's logic
+  2. First solution fails — parent holds firm gently
+  3. Child sits with the problem — parent stays present without hinting
+  4. Child finds another way, or accepts the difficulty — both are valid outcomes
+normalization: Between 2 and 5, the ability to tolerate frustration is literally developing in the brain. Small doses of difficulty — held safely — build the capacity. This is how frustration tolerance grows, not through avoidance.
+watch_out: Calibrate the difficulty carefully. Under 4, the window is very short — 2 to 3 minutes of struggle is enough. Over 4, it can extend. Watch the child, not the clock. Distress is different from frustration — know the difference.
+
+AGE BAND 6-8
+vehicle: real physical challenge or genuine game difficulty — the struggle is real, not fictional
+parent_role: Present, warm, not rescuing — available if asked but doesn't offer
+child_role: The one working through something genuinely hard
+spark: Set a real physical challenge just beyond their current capability — a climb, a balance, a puzzle level, a skill move. Be there. Say nothing.
+shape:
+  1. Challenge is set at genuine difficulty — not impossible, not easy
+  2. Child attempts and struggles — parent holds the space
+  3. Parent does not hint, coach, or rescue unless asked
+  4. Child either breaks through or comes to parent — both are discussed afterward: "What was that like?"
+normalization: At 6-8 the most resilient children are not those who never failed — they are the ones who experienced difficulty and found they survived it. The parent's presence without rescue is the exact message: "I believe you can handle this."
+watch_out: The hardest thing for parents in this archetype is doing nothing. Every instinct says help. Resisting that instinct — staying present but not intervening — is the entire parenting skill being practiced here. Your stillness is the gift.
+
+COMBINATIONS
+pairs_well_with: underdog-wins, parent-models-emotional-regulation, mundane-mission
+often_leads_to: underdog-wins
+
+OUTPUT
+produces_take_out: false
+
+SOURCES
+Grotberg Resilience Framework
+Smith et al. — Oh Biscuits, CQUniversity 2025
+Sandseter — Risky play and anxiety prevention, PMC 2020
+Cohen — Playful Parenting
+
+
+==========================================
+END OF ARCHETYPE KNOWLEDGE BASE
+==========================================
+Total archetypes: 17
+Age bands: 2-5 and 6-8
+Research tiers: 2 archetypes at Tier 2, 4 at Tier 3, 3 at Tier 4, 6 at Tier 5
+Bluey validated: 10 of 17
+Produces take-out: 5 of 17
+Character sensitive: 2 of 17 (feelings-as-characters, animal-family)
+==========================================

@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ImaginPlay — Play ideas for parents</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FEFCF9;
+      --card: #FFFFFF;
+      --primary: #2D7D6F;
+      --primary-light: #E8F5F2;
+      --accent: #F07C5A;
+      --accent-light: #FFF0EB;
+      --text: #2A2A2A;
+      --text-soft: #6B7280;
+      --border: #E5DDD5;
+      --green-bg: #F0F9F6;
+      --amber-bg: #FFFBF0;
+      --radius: 14px;
+      --shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 32px 0 28px;
+    }
+    .header .logo { font-size: 36px; margin-bottom: 10px; }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
+    .header p {
+      color: var(--text-soft);
+      font-size: 15px;
+      margin-top: 6px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-soft);
+      margin-bottom: 18px;
+    }
+
+    /* Form elements */
+    label {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .label-hint {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-soft);
+      margin-left: 4px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .field { margin-bottom: 20px; }
+    .field:last-child { margin-bottom: 0; }
+
+    /* Age buttons */
+    .age-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .age-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .age-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .age-btn.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* Temperament chips */
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      font-size: 14px;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .chip:hover { border-color: var(--primary); color: var(--primary); }
+    .chip.selected {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* Timing buttons */
+    .timing-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .timing-btn {
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .timing-btn .emoji { font-size: 20px; }
+    .timing-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .timing-btn.selected {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Energy / location chips */
+    .option-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .option-btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .option-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .option-btn.selected {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Conditional sections */
+    .conditional { display: none; margin-top: 16px; }
+    .conditional.visible { display: block; }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.2px;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: #D96A49; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(240,124,90,0.35); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { background: #CCC; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* Loading */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 48px 20px;
+    }
+    .loading.visible { display: block; }
+    .loading-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .loading-dots span {
+      width: 10px; height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .loading p { color: var(--text-soft); font-size: 15px; }
+    .loading strong { color: var(--primary); }
+
+    /* Output */
+    .output { display: none; }
+    .output.visible { display: block; }
+
+    .output-section {
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 12px;
+    }
+    .output-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .output-text {
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    /* This is normal */
+    .section-normal {
+      background: var(--green-bg);
+      border: 1px solid #C8E8DF;
+    }
+    .section-normal .output-label { color: #2D7D6F; }
+
+    /* The Spark */
+    .section-spark {
+      background: var(--accent-light);
+      border: 1px solid #F5C5B0;
+    }
+    .section-spark .output-label { color: var(--accent); }
+    .section-spark .output-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* The Why */
+    .section-why {
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .section-why .output-label { color: var(--text-soft); }
+
+    /* How it unfolds */
+    .section-shape {
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .section-shape .output-label { color: var(--text-soft); }
+    .shape-steps { list-style: none; padding: 0; }
+    .shape-steps li {
+      display: flex;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: 15px;
+      line-height: 1.55;
+      border-bottom: 1px solid var(--border);
+    }
+    .shape-steps li:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* One thing to watch */
+    .section-watch {
+      background: var(--amber-bg);
+      border: 1px solid #F5E6C0;
+    }
+    .section-watch .output-label { color: #9A6C00; }
+
+    /* Take-out */
+    .section-takeout {
+      background: var(--primary-light);
+      border: 1px solid #C8E8DF;
+    }
+    .section-takeout .output-label { color: var(--primary); }
+
+    /* Redirect (triage) */
+    .section-redirect {
+      background: #FFF5F5;
+      border: 1px solid #FECACA;
+    }
+    .section-redirect .output-label { color: #DC2626; }
+
+    /* Connection activity */
+    .section-connection {
+      background: var(--green-bg);
+      border: 1px solid #C8E8DF;
+    }
+    .section-connection .output-label { color: var(--primary); }
+
+    /* Why this works accordion */
+    .accordion {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .accordion-header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .accordion-header span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .accordion-icon {
+      font-size: 18px;
+      color: var(--text-soft);
+      transition: transform 0.2s;
+    }
+    .accordion.open .accordion-icon { transform: rotate(180deg); }
+    .accordion-body {
+      display: none;
+      padding: 0 20px 18px;
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.65;
+    }
+    .accordion.open .accordion-body { display: block; }
+
+    /* Action buttons */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .btn-secondary {
+      flex: 1;
+      padding: 13px;
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .btn-primary-outline {
+      flex: 1;
+      padding: 13px;
+      border-radius: var(--radius);
+      border: 2px solid var(--accent);
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-primary-outline:hover {
+      background: var(--accent-light);
+    }
+
+    /* Error */
+    .error-msg {
+      display: none;
+      background: #FFF5F5;
+      border: 1px solid #FECACA;
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      color: #DC2626;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+    .error-msg.visible { display: block; }
+
+    @media (max-width: 400px) {
+      .container { padding: 16px 14px 48px; }
+      .age-btn { width: 44px; height: 44px; font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">🎭</div>
+      <h1>ImaginPlay</h1>
+      <p>Play ideas grounded in child development</p>
+    </div>
+
+    <!-- Form -->
+    <div id="form-section">
+
+      <!-- Child Profile -->
+      <div class="card">
+        <div class="card-title">About your child</div>
+
+        <div class="field">
+          <label>Name <span class="label-hint">(optional)</span></label>
+          <input type="text" id="child-name" placeholder="e.g. Maya" />
+        </div>
+
+        <div class="field">
+          <label>Age</label>
+          <div class="age-grid" id="age-grid">
+            <button class="age-btn" data-age="2">2</button>
+            <button class="age-btn" data-age="3">3</button>
+            <button class="age-btn" data-age="4">4</button>
+            <button class="age-btn" data-age="5">5</button>
+            <button class="age-btn" data-age="6">6</button>
+            <button class="age-btn" data-age="7">7</button>
+            <button class="age-btn" data-age="8">8</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Temperament <span class="label-hint">(pick one or two)</span></label>
+          <div class="chip-grid" id="temperament-grid">
+            <div class="chip" data-value="sensitive">Sensitive</div>
+            <div class="chip" data-value="bold">Bold</div>
+            <div class="chip" data-value="energetic">Energetic</div>
+            <div class="chip" data-value="cautious">Cautious</div>
+            <div class="chip" data-value="social">Social</div>
+            <div class="chip" data-value="independent">Independent</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Loves to play with <span class="label-hint">(toys, figures, characters)</span></label>
+          <input type="text" id="loves-play" placeholder="e.g. stuffed rabbit, small dinosaur figures, doctor kit" />
+        </div>
+
+        <div class="field">
+          <label>Into right now <span class="label-hint">(shows, games, themes)</span></label>
+          <input type="text" id="loves-now" placeholder="e.g. Bluey, Minecraft, football, dinosaurs" />
+        </div>
+      </div>
+
+      <!-- Today's Session -->
+      <div class="card">
+        <div class="card-title">Today's session</div>
+
+        <div class="field">
+          <label>What do you want play to help your child with today?</label>
+          <textarea id="play-goal" placeholder="e.g. She has a new fear of someone breaking into the house. She cries at night about it." rows="3"></textarea>
+        </div>
+
+        <div class="field">
+          <label>When are you thinking of playing?</label>
+          <div class="timing-grid" id="timing-grid">
+            <button class="timing-btn" data-timing="right now">
+              <span class="emoji">⚡</span>
+              <div>
+                <div style="font-weight:600">Right now</div>
+                <div style="font-size:13px;font-weight:400;color:var(--text-soft)">We're about to play</div>
+              </div>
+            </button>
+            <button class="timing-btn" data-timing="later today">
+              <span class="emoji">📅</span>
+              <div>
+                <div style="font-weight:600">Later today</div>
+                <div style="font-size:13px;font-weight:400;color:var(--text-soft)">Planning ahead</div>
+              </div>
+            </button>
+            <button class="timing-btn" data-timing="just exploring">
+              <span class="emoji">💡</span>
+              <div>
+                <div style="font-weight:600">Just exploring ideas</div>
+                <div style="font-size:13px;font-weight:400;color:var(--text-soft)">No specific time in mind</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- If right now -->
+        <div class="conditional" id="energy-section">
+          <label>How are they right now?</label>
+          <div class="option-grid" id="energy-grid">
+            <button class="option-btn" data-energy="wound up">🌪 Wound up</button>
+            <button class="option-btn" data-energy="calm">😌 Calm</button>
+            <button class="option-btn" data-energy="tired">😴 Tired</button>
+          </div>
+        </div>
+
+        <!-- If later today -->
+        <div class="conditional" id="location-section">
+          <label>Where will you be?</label>
+          <div class="option-grid" id="location-grid">
+            <button class="option-btn" data-location="at home">🏠 At home</button>
+            <button class="option-btn" data-location="outside">🌳 Outside</button>
+            <button class="option-btn" data-location="in the car">🚗 In the car</button>
+            <button class="option-btn" data-location="not sure yet">🤷 Not sure yet</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Error -->
+      <div class="error-msg" id="error-msg">
+        Something went wrong. Please check your inputs and try again.
+      </div>
+
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()">
+        Find a play idea →
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+      <div class="loading-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <p>Finding the perfect play idea<br><strong id="loading-name"></strong></p>
+    </div>
+
+    <!-- Output -->
+    <div class="output" id="output-section">
+      <div id="output-content"></div>
+
+      <div class="action-row">
+        <button class="btn-secondary" onclick="resetForm()">← Start over</button>
+        <button class="btn-primary-outline" onclick="tryAgain()">Try a different idea</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // State
+    let selectedAge = null;
+    let selectedTemperament = [];
+    let selectedTiming = null;
+    let selectedEnergy = null;
+    let selectedLocation = null;
+    let lastUserMessage = null;
+
+    // Age buttons
+    document.querySelectorAll('.age-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedAge = btn.dataset.age;
+      });
+    });
+
+    // Temperament chips
+    document.querySelectorAll('#temperament-grid .chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.dataset.value;
+        if (chip.classList.contains('selected')) {
+          chip.classList.remove('selected');
+          selectedTemperament = selectedTemperament.filter(t => t !== val);
+        } else if (selectedTemperament.length < 2) {
+          chip.classList.add('selected');
+          selectedTemperament.push(val);
+        }
+      });
+    });
+
+    // Timing buttons
+    document.querySelectorAll('.timing-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.timing-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedTiming = btn.dataset.timing;
+        selectedEnergy = null;
+        selectedLocation = null;
+        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+
+        document.getElementById('energy-section').classList.toggle('visible', selectedTiming === 'right now');
+        document.getElementById('location-section').classList.toggle('visible', selectedTiming === 'later today');
+      });
+    });
+
+    // Energy buttons
+    document.querySelectorAll('#energy-grid .option-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#energy-grid .option-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedEnergy = btn.dataset.energy;
+      });
+    });
+
+    // Location buttons
+    document.querySelectorAll('#location-grid .option-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#location-grid .option-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedLocation = btn.dataset.location;
+      });
+    });
+
+    // Build user message
+    function buildUserMessage() {
+      const name = document.getElementById('child-name').value.trim();
+      const goal = document.getElementById('play-goal').value.trim();
+      const lovesPlay = document.getElementById('loves-play').value.trim();
+      const lovesNow = document.getElementById('loves-now').value.trim();
+
+      let msg = '--- ABOUT MY CHILD ---\n';
+      if (name) msg += `Name: ${name}\n`;
+      msg += `Age: ${selectedAge}\n`;
+      if (selectedTemperament.length > 0) msg += `Temperament: ${selectedTemperament.join(', ')}\n`;
+      if (lovesPlay) msg += `Loves to play with: ${lovesPlay}\n`;
+      if (lovesNow) msg += `Into right now: ${lovesNow}\n`;
+
+      msg += '\n--- TODAY\'S SESSION ---\n';
+      msg += `What I want play to help with: ${goal}\n`;
+      msg += `When we are playing: ${selectedTiming}\n`;
+
+      if (selectedTiming === 'right now' && selectedEnergy) {
+        msg += `How they are right now: ${selectedEnergy}\n`;
+      }
+      if (selectedTiming === 'later today' && selectedLocation) {
+        msg += `Where we will be: ${selectedLocation}\n`;
+      }
+
+      return msg;
+    }
+
+    // Validate
+    function validate() {
+      const goal = document.getElementById('play-goal').value.trim();
+      if (!selectedAge) { showError('Please select your child\'s age.'); return false; }
+      if (!goal) { showError('Please describe what you\'d like play to help with.'); return false; }
+      if (!selectedTiming) { showError('Please select when you\'re planning to play.'); return false; }
+      return true;
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.classList.add('visible');
+    }
+
+    function hideError() {
+      document.getElementById('error-msg').classList.remove('visible');
+    }
+
+    // Submit
+    async function submitForm() {
+      hideError();
+      if (!validate()) return;
+
+      const name = document.getElementById('child-name').value.trim();
+      const btn = document.getElementById('submit-btn');
+
+      lastUserMessage = buildUserMessage();
+
+      // Show loading
+      document.getElementById('form-section').style.display = 'none';
+      const loading = document.getElementById('loading');
+      loading.classList.add('visible');
+      document.getElementById('loading-name').textContent = name ? `for ${name}` : '';
+
+      btn.disabled = true;
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userMessage: lastUserMessage })
+        });
+
+        const result = await response.json();
+        loading.classList.remove('visible');
+
+        if (result.success && result.data) {
+          renderOutput(result.data, name);
+        } else if (result.raw) {
+          renderRawOutput(result.raw);
+        } else {
+          showFormWithError(result.error || 'Something went wrong. Please try again.');
+        }
+
+      } catch {
+        loading.classList.remove('visible');
+        showFormWithError('Could not connect. Please check your internet and try again.');
+      }
+
+      btn.disabled = false;
+    }
+
+    function showFormWithError(msg) {
+      document.getElementById('form-section').style.display = 'block';
+      showError(msg);
+    }
+
+    // Try again
+    async function tryAgain() {
+      if (!lastUserMessage) return;
+
+      document.getElementById('output-section').classList.remove('visible');
+      const loading = document.getElementById('loading');
+      loading.classList.add('visible');
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userMessage: lastUserMessage + '\n\nPlease suggest a completely different approach or archetype from your previous suggestion.' })
+        });
+
+        const result = await response.json();
+        loading.classList.remove('visible');
+
+        const name = document.getElementById('child-name').value.trim();
+        if (result.success && result.data) {
+          renderOutput(result.data, name);
+        } else {
+          document.getElementById('output-section').classList.add('visible');
+        }
+
+      } catch {
+        loading.classList.remove('visible');
+        document.getElementById('output-section').classList.add('visible');
+      }
+    }
+
+    // Reset
+    function resetForm() {
+      document.getElementById('output-section').classList.remove('visible');
+      document.getElementById('form-section').style.display = 'block';
+      document.getElementById('output-content').innerHTML = '';
+      hideError();
+      lastUserMessage = null;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Render output
+    function renderOutput(data, name) {
+      const el = document.getElementById('output-content');
+      el.innerHTML = '';
+
+      const nameStr = name ? ` for ${name}` : '';
+
+      if (data.triage_tier === 3) {
+        el.innerHTML = `
+          ${section('normal', '🌱 A note first', data.this_is_normal)}
+          ${section('redirect', '💬 What we recommend', data.redirect_message)}
+          ${data.connection_activity ? section('connection', '🤝 Something simple for now', data.connection_activity) : ''}
+        `;
+      } else {
+        const isTier2 = data.triage_tier === 2;
+
+        el.innerHTML = `
+          ${section('normal', '🌱 This is normal', data.this_is_normal)}
+          ${data.the_spark ? section('spark', '⚡ The spark', data.the_spark) : ''}
+          ${data.the_why ? section('why', '💡 Why this works', data.the_why) : ''}
+          ${data.how_it_unfolds ? shapeSection(data.how_it_unfolds) : ''}
+          ${data.one_thing_to_watch ? section('watch', '👀 One thing to watch', data.one_thing_to_watch) : ''}
+          ${data.take_out ? section('takeout', '📌 Before you finish', data.take_out) : ''}
+          ${isTier2 && data.redirect_message ? section('redirect', '💬 Worth knowing', data.redirect_message) : ''}
+          ${data.why_this_works ? accordionSection(data.why_this_works) : ''}
+        `;
+      }
+
+      document.getElementById('output-section').classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function section(type, label, text) {
+      return `
+        <div class="output-section section-${type}">
+          <div class="output-label">${label}</div>
+          <div class="output-text">${escapeHtml(text)}</div>
+        </div>
+      `;
+    }
+
+    function shapeSection(steps) {
+      const items = steps.map((step, i) => `
+        <li>
+          <span class="step-num">${i + 1}</span>
+          <span>${escapeHtml(step)}</span>
+        </li>
+      `).join('');
+
+      return `
+        <div class="output-section section-shape">
+          <div class="output-label">🗺️ How it unfolds</div>
+          <ul class="shape-steps">${items}</ul>
+        </div>
+      `;
+    }
+
+    function accordionSection(text) {
+      return `
+        <div class="accordion" id="why-accordion">
+          <div class="accordion-header" onclick="toggleAccordion()">
+            <span>🔬 The research behind this</span>
+            <span class="accordion-icon">⌄</span>
+          </div>
+          <div class="accordion-body">${escapeHtml(text)}</div>
+        </div>
+      `;
+    }
+
+    function toggleAccordion() {
+      document.getElementById('why-accordion').classList.toggle('open');
+    }
+
+    function renderRawOutput(raw) {
+      const el = document.getElementById('output-content');
+      el.innerHTML = `
+        <div class="output-section section-why">
+          <div class="output-label">Play idea</div>
+          <div class="output-text" style="white-space:pre-wrap">${escapeHtml(raw)}</div>
+        </div>
+      `;
+      document.getElementById('output-section').classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
