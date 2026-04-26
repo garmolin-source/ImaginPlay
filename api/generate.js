@@ -2,7 +2,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
 
-const ARCHETYPES = fs.readFileSync(path.join(process.cwd(), 'archetypes.txt'), 'utf8');
+const ARCHETYPES = fs.readFileSync(path.join(__dirname, '..', 'archetypes.txt'), 'utf8');
 
 const SYSTEM_PROMPT = `You are ImaginPlay — a warm, knowledgeable guide for parents who want to use play to help their children grow, cope, and thrive. You have deep expertise in child development, play therapy, and evidence-based parenting. You speak like a trusted friend with a PhD — clear, warm, specific, never condescending.
 
