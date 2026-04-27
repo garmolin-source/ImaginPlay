@@ -683,35 +683,82 @@
       );
     }
 
+    // Shared full-text review area — appears when content is long enough to be cut off
+    function FullTextReview({ value, onChange }) {
+      const taRef = useRef(null);
+
+      // Auto-resize the review textarea to fit all content
+      useEffect(() => {
+        const ta = taRef.current;
+        if (!ta) return;
+        ta.style.height = 'auto';
+        ta.style.height = ta.scrollHeight + 'px';
+      }, [value]);
+
+      if (!value || value.length < 38) return null;
+      return (
+        <div style={{ marginTop:10, borderRadius:12, overflow:'hidden',
+          border:'2px solid var(--primary-light)', background:'var(--primary-light)' }}>
+          <div style={{ padding:'6px 14px 4px', fontSize:11, fontWeight:700,
+            textTransform:'uppercase', letterSpacing:'0.8px', color:'var(--primary)',
+            fontFamily:'var(--font-ui)' }}>
+            Full answer — tap to edit
+          </div>
+          <textarea
+            ref={taRef}
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            style={{ width:'100%', padding:'8px 14px 12px', border:'none', background:'transparent',
+              fontSize:15, fontFamily:'var(--font-ui)', color:'var(--text)', outline:'none',
+              resize:'none', lineHeight:1.6, display:'block', overflow:'hidden' }}
+          />
+        </div>
+      );
+    }
+
     function TextInput({ q, value, onChange }) {
       const ref = useRef(null);
       useEffect(() => { setTimeout(() => ref.current?.focus(), 120); }, []);
       return (
-        <div style={{ display:'flex', gap:10, alignItems:'center' }}>
-          <input ref={ref} type="text" value={value||''} onChange={e => onChange(e.target.value)}
-            placeholder={q.placeholder||''}
-            onKeyDown={e => { if (e.key==='Enter' && q.optional) e.target.blur(); }}
-            style={{ flex:1, padding:'14px 16px', border:'2px solid var(--border)', borderRadius:12,
-              fontSize:15.5, fontFamily:'var(--font-ui)', color:'var(--text)', background:'var(--bg)',
-              outline:'none', transition:'border-color 0.2s' }}
-            onFocus={e => e.target.style.borderColor='var(--primary)'}
-            onBlur={e  => e.target.style.borderColor='var(--border)'}
-          />
-          <MicButton value={value} onChange={onChange} />
+        <div>
+          <div style={{ display:'flex', gap:10, alignItems:'center' }}>
+            <input ref={ref} type="text" value={value||''} onChange={e => onChange(e.target.value)}
+              placeholder={q.placeholder||''}
+              onKeyDown={e => { if (e.key==='Enter' && q.optional) e.target.blur(); }}
+              style={{ flex:1, padding:'14px 16px', border:'2px solid var(--border)', borderRadius:12,
+                fontSize:15.5, fontFamily:'var(--font-ui)', color:'var(--text)', background:'var(--bg)',
+                outline:'none', transition:'border-color 0.2s' }}
+              onFocus={e => e.target.style.borderColor='var(--primary)'}
+              onBlur={e  => e.target.style.borderColor='var(--border)'}
+            />
+            <MicButton value={value} onChange={onChange} />
+          </div>
+          <FullTextReview value={value} onChange={onChange} />
         </div>
       );
     }
 
     function TextareaInput({ q, value, onChange }) {
       const ref = useRef(null);
+
       useEffect(() => { setTimeout(() => ref.current?.focus(), 120); }, []);
+
+      // Auto-resize textarea to show all content without scrolling
+      useEffect(() => {
+        const ta = ref.current;
+        if (!ta) return;
+        ta.style.height = 'auto';
+        ta.style.height = ta.scrollHeight + 'px';
+      }, [value]);
+
       return (
-        <div style={{ position:'relative' }}>
+        <div>
           <textarea ref={ref} value={value||''} onChange={e => onChange(e.target.value)}
-            placeholder={q.placeholder||''} rows={5}
+            placeholder={q.placeholder||''} rows={4}
             style={{ width:'100%', padding:'14px 16px', border:'2px solid var(--border)', borderRadius:12,
               fontSize:15.5, fontFamily:'var(--font-ui)', color:'var(--text)', background:'var(--bg)',
-              outline:'none', resize:'vertical', lineHeight:1.6, transition:'border-color 0.2s' }}
+              outline:'none', resize:'none', lineHeight:1.6, transition:'border-color 0.2s',
+              overflow:'hidden', display:'block' }}
             onFocus={e => e.target.style.borderColor='var(--primary)'}
             onBlur={e  => e.target.style.borderColor='var(--border)'}
           />
