@@ -422,10 +422,13 @@
     }
 
     // ─── SPEECH INPUT ─────────────────────────────────────────────────────────
-    function useSpeechInput(onResult) {
+    function useSpeechInput(onAccumulated) {
       const [listening, setListening] = useState(false);
-      const listeningRef = useRef(false); // ref so closures always see current value
-      const recRef = useRef(null);
+      const listeningRef = useRef(false);
+      const recRef       = useRef(null);
+      const accRef       = useRef('');       // grows throughout the recording session
+      const callbackRef  = useRef(onAccumulated);
+      callbackRef.current = onAccumulated;   // always points to the latest callback
       const supported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
       function stop() {
@@ -433,6 +436,7 @@
         setListening(false);
         try { recRef.current?.stop(); } catch(e) {}
         recRef.current = null;
+        accRef.current = '';
       }
 
       function startRec() {
@@ -440,22 +444,24 @@
         if (!SR) return;
         const rec = new SR();
         rec.lang = 'en-US';
-        rec.continuous = true;      // keep going until user taps stop
-        rec.interimResults = false; // only fire on complete utterances
+        rec.continuous = true;
+        rec.interimResults = false;
         rec.onresult = e => {
-          // collect only the new final results from this event
-          let newText = '';
+          let chunk = '';
           for (let i = e.resultIndex; i < e.results.length; i++) {
-            if (e.results[i].isFinal) newText += e.results[i][0].transcript + ' ';
+            if (e.results[i].isFinal) chunk += e.results[i][0].transcript + ' ';
           }
-          if (newText.trim()) onResult(newText.trim());
+          if (chunk.trim()) {
+            accRef.current += chunk;                         // append to session total
+            callbackRef.current(accRef.current.trim());      // send full accumulated text
+          }
         };
         rec.onerror = e => {
-          if (e.error === 'no-speech') return; // pause between words — ignore, keep listening
-          stop(); // real error — give up
+          if (e.error === 'no-speech') return;  // normal pause — keep going
+          stop();
         };
         rec.onend = () => {
-          // Chromium/Arc stops recognition unexpectedly — restart if user hasn't stopped
+          // Chromium/Arc kills recognition on pauses — restart transparently
           if (listeningRef.current) {
             try { startRec(); } catch(e) { stop(); }
           }
@@ -466,6 +472,7 @@
 
       function toggle() {
         if (listeningRef.current) { stop(); return; }
+        accRef.current = '';
         listeningRef.current = true;
         setListening(true);
         startRec();
@@ -474,11 +481,27 @@
       return { listening, toggle, supported };
     }
 
-    function MicButton({ onResult, style: extraStyle = {} }) {
-      const { listening, toggle, supported } = useSpeechInput(onResult);
+    // MicButton receives the current field value + onChange.
+    // It snapshots the field value when recording starts, then writes
+    // base + accumulated dictation — no stale-closure appending.
+    function MicButton({ value, onChange, style: extraStyle = {} }) {
+      const baseRef = useRef('');
+
+      function onAccumulated(accumulated) {
+        const base = baseRef.current;
+        onChange(base + (base ? ' ' : '') + accumulated);
+      }
+
+      const { listening, toggle, supported } = useSpeechInput(onAccumulated);
+
+      function handleClick() {
+        if (!listening) baseRef.current = value || '';  // snapshot before recording starts
+        toggle();
+      }
+
       if (!supported) return null;
       return (
-        <button onClick={toggle} title={listening ? 'Stop recording' : 'Speak your answer'} style={{
+        <button onClick={handleClick} title={listening ? 'Stop recording' : 'Speak your answer'} style={{
           flexShrink: 0, width: 40, height: 40, borderRadius: '50%', border: 'none',
           background: listening ? 'var(--accent)' : 'var(--primary-light)',
           color:       listening ? 'white'        : 'var(--primary)',
@@ -674,7 +697,7 @@
             onFocus={e => e.target.style.borderColor='var(--primary)'}
             onBlur={e  => e.target.style.borderColor='var(--border)'}
           />
-          <MicButton onResult={t => onChange((value||'') + (value ? ' ' : '') + t)} />
+          <MicButton value={value} onChange={onChange} />
         </div>
       );
     }
@@ -693,7 +716,7 @@
             onBlur={e  => e.target.style.borderColor='var(--border)'}
           />
           <div style={{ display:'flex', justifyContent:'flex-end', marginTop:8 }}>
-            <MicButton onResult={t => onChange((value||'') + (value ? ' ' : '') + t)} />
+            <MicButton value={value} onChange={onChange} />
           </div>
         </div>
       );
