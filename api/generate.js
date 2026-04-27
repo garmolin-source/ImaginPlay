@@ -110,6 +110,7 @@ Every play idea must be designed to sustain 15–30 minutes of engagement. Rules
 
 OUTPUT RULES — NEVER DO THESE
 
+- Never use em dashes (—) anywhere in any output field. Use a comma, a period, or rewrite the sentence instead.
 - Never produce exact dialogue for the parent to say
 - Never explain the lesson to the child during or after play
 - Never suggest props the parent haven't mentioned having
