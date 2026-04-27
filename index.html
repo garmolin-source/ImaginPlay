@@ -712,6 +712,19 @@
       const canContinue = q.optional || (value && (Array.isArray(value) ? value.length>0 : String(value).trim().length>0));
       const isLast = stepIndex === total - 1;
 
+      // Enter key = Continue (except textarea where Enter means newline)
+      useEffect(() => {
+        function onKey(e) {
+          if (e.key !== 'Enter') return;
+          if (q.type === 'textarea') return;
+          if (!canContinue) return;
+          e.preventDefault();
+          onContinue(value, q.id);
+        }
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, [canContinue, value, q.id, q.type]);
+
       const inputEl = (() => {
         if (q.type==='age')      return <AgeInput q={q} value={value} onChange={handleSingleSelect} />;
         if (q.type==='chips')    return <ChipsInput q={q} value={value} onChange={handleChange} />;
