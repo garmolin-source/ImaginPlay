@@ -1,1008 +1,1105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ImaginPlay — Play ideas for parents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #FEFCF9;
-      --card: #FFFFFF;
-      --primary: #2D7D6F;
-      --primary-light: #E8F5F2;
-      --accent: #F07C5A;
-      --accent-light: #FFF0EB;
-      --text: #2A2A2A;
-      --text-soft: #6B7280;
-      --border: #E5DDD5;
-      --green-bg: #F0F9F6;
-      --amber-bg: #FFFBF0;
-      --radius: 14px;
-      --shadow: 0 2px 16px rgba(0,0,0,0.07);
+      /* Storybook (default) */
+      --bg: #F8F5EF;
+      --bg-card: #FDFAF4;
+      --primary: #2A4849;
+      --primary-light: #E4EDEB;
+      --accent: #C86B3A;
+      --accent-light: #F7EDE6;
+      --gold: #B48A38;
+      --gold-light: #F7F0DC;
+      --text: #1E1A14;
+      --text-soft: #6B5E4A;
+      --border: #E2D8C8;
+      --sage: #ECF3EF;
+      --sage-border: #BDD5C8;
+      --radius: 16px;
+      --shadow: 0 2px 20px rgba(0,0,0,0.06);
+      --font-display: 'Lora', Georgia, serif;
+      --font-ui: 'DM Sans', system-ui, sans-serif;
     }
+
+    html, body { height: 100%; overflow-x: hidden; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: var(--font-ui);
       font-size: 16px;
       line-height: 1.6;
-      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      max-width: 580px;
-      margin: 0 auto;
-      padding: 24px 20px 60px;
+    #root { min-height: 100%; display: flex; flex-direction: column; }
+
+    /* Paper grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 9999;
     }
 
-    /* Header */
-    .header {
-      text-align: center;
-      padding: 32px 0 28px;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .header .logo { font-size: 36px; margin-bottom: 10px; }
-    .header h1 {
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -0.5px;
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .header p {
-      color: var(--text-soft);
-      font-size: 15px;
-      margin-top: 6px;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
-
-    /* Cards */
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      margin-bottom: 16px;
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50%       { transform: scale(1.12); opacity: 1; }
     }
-    .card-title {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-soft);
-      margin-bottom: 18px;
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+      40%           { transform: scale(1); opacity: 1; }
     }
 
-    /* Form elements */
-    label {
-      display: block;
-      font-size: 15px;
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
-    .label-hint {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text-soft);
-      margin-left: 4px;
-    }
+    .anim-fade-up   { animation: fadeUp 0.38s cubic-bezier(.22,.68,0,1.2) both; }
+    .anim-fade-down { animation: fadeDown 0.3s ease both; }
+    .anim-fade-in   { animation: fadeIn 0.35s ease both; }
 
-    input[type="text"], textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--text);
-      background: var(--bg);
-      transition: border-color 0.2s;
-      outline: none;
-    }
-    input[type="text"]:focus, textarea:focus {
-      border-color: var(--primary);
-    }
-    textarea {
-      resize: vertical;
-      min-height: 90px;
-    }
-
-    .field { margin-bottom: 20px; }
-    .field:last-child { margin-bottom: 0; }
-
-    /* Age buttons */
-    .age-grid {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .age-btn {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      background: var(--bg);
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text-soft);
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .age-btn:hover { border-color: var(--primary); color: var(--primary); }
-    .age-btn.selected {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-    }
-
-    /* Temperament chips */
-    .chip-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .chip {
-      padding: 8px 14px;
-      border-radius: 20px;
-      border: 1.5px solid var(--border);
-      background: var(--bg);
-      font-size: 14px;
-      color: var(--text-soft);
-      cursor: pointer;
-      transition: all 0.15s;
-      user-select: none;
-    }
-    .chip:hover { border-color: var(--primary); color: var(--primary); }
-    .chip.selected {
-      background: var(--primary-light);
-      border-color: var(--primary);
-      color: var(--primary);
-      font-weight: 500;
-    }
-
-    /* Timing buttons */
-    .timing-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .timing-btn {
-      padding: 14px 16px;
-      border-radius: 12px;
-      border: 2px solid var(--border);
-      background: var(--bg);
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-soft);
-      cursor: pointer;
-      transition: all 0.15s;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .timing-btn .emoji { font-size: 20px; }
-    .timing-btn:hover { border-color: var(--primary); color: var(--primary); }
-    .timing-btn.selected {
-      background: var(--primary-light);
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    /* Energy / location chips */
-    .option-grid {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .option-btn {
-      padding: 10px 16px;
-      border-radius: 10px;
-      border: 2px solid var(--border);
-      background: var(--bg);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-soft);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .option-btn:hover { border-color: var(--primary); color: var(--primary); }
-    .option-btn.selected {
-      background: var(--primary-light);
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    /* Conditional sections */
-    .conditional { display: none; margin-top: 16px; }
-    .conditional.visible { display: block; }
-
-    /* Submit button */
-    .submit-btn {
-      width: 100%;
-      padding: 16px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 17px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.2px;
-      margin-top: 8px;
-    }
-    .submit-btn:hover { background: #D96A49; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(240,124,90,0.35); }
-    .submit-btn:active { transform: translateY(0); }
-    .submit-btn:disabled { background: #CCC; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    /* Loading */
-    .loading {
-      display: none;
-      text-align: center;
-      padding: 48px 20px;
-    }
-    .loading.visible { display: block; }
-    .loading-dots {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .loading-dots span {
-      width: 10px; height: 10px;
-      background: var(--primary);
-      border-radius: 50%;
-      animation: bounce 1.2s infinite;
-    }
-    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
-      40% { transform: scale(1); opacity: 1; }
-    }
-    .loading p { color: var(--text-soft); font-size: 15px; }
-    .loading strong { color: var(--primary); }
-
-    /* Output */
-    .output { display: none; }
-    .output.visible { display: block; }
-
-    .output-section {
-      border-radius: var(--radius);
-      padding: 20px 22px;
-      margin-bottom: 12px;
-    }
-    .output-label {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 10px;
-      opacity: 0.75;
-    }
-    .output-text {
-      font-size: 15px;
-      line-height: 1.65;
-    }
-
-    /* This is normal */
-    .section-normal {
-      background: var(--green-bg);
-      border: 1px solid #C8E8DF;
-    }
-    .section-normal .output-label { color: #2D7D6F; }
-
-    /* The Spark */
-    .section-spark {
-      background: var(--accent-light);
-      border: 1px solid #F5C5B0;
-    }
-    .section-spark .output-label { color: var(--accent); }
-    .section-spark .output-text {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    /* The Why */
-    .section-why {
-      background: var(--card);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-    }
-    .section-why .output-label { color: var(--text-soft); }
-
-    /* Output header banner */
-    .output-header {
-      background: var(--primary);
-      color: #fff;
-      border-radius: var(--radius);
-      padding: 18px 22px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .output-header .output-header-icon { font-size: 28px; flex-shrink: 0; }
-    .output-header .output-header-text { font-size: 16px; font-weight: 600; line-height: 1.4; }
-    .output-header .output-header-sub { font-size: 13px; opacity: 0.8; margin-top: 2px; }
-
-    /* Who plays who */
-    .roles-box {
-      background: #F4F0FF;
-      border: 1px solid #D9D0F5;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 16px;
-    }
-    .roles-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #7C5CBF;
-      margin-bottom: 10px;
-    }
-    .roles-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .role-card {
-      border-radius: 8px;
-      padding: 10px 12px;
-    }
-    .role-parent { background: #EBF5FF; border: 1px solid #BFDBFE; }
-    .role-child  { background: #FFF7ED; border: 1px solid #FED7AA; }
-    .role-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 3px;
-    }
-    .role-parent .role-label { color: #2563EB; }
-    .role-child  .role-label { color: #EA580C; }
-    .role-name { font-size: 15px; font-weight: 700; color: var(--text); }
-    .roles-note { font-size: 13px; color: var(--text-soft); margin-top: 10px; font-style: italic; }
-
-    /* How it unfolds */
-    .section-shape {
-      background: var(--card);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-    }
-    .section-shape .output-label { color: var(--text-soft); }
-    .shape-steps { list-style: none; padding: 0; }
-    .shape-steps li {
-      display: flex;
-      gap: 12px;
-      padding: 8px 0;
-      font-size: 15px;
-      line-height: 1.55;
-      border-bottom: 1px solid var(--border);
-    }
-    .shape-steps li:last-child { border-bottom: none; }
-    .step-num {
-      flex-shrink: 0;
-      width: 24px;
-      height: 24px;
-      background: var(--primary-light);
-      color: var(--primary);
-      border-radius: 50%;
-      font-size: 12px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 1px;
-    }
-
-    /* One thing to watch */
-    .section-watch {
-      background: var(--amber-bg);
-      border: 1px solid #F5E6C0;
-    }
-    .section-watch .output-label { color: #9A6C00; }
-
-    /* Take-out */
-    .section-takeout {
-      background: var(--primary-light);
-      border: 1px solid #C8E8DF;
-    }
-    .section-takeout .output-label { color: var(--primary); }
-
-    /* Redirect (triage) */
-    .section-redirect {
-      background: #FFF5F5;
-      border: 1px solid #FECACA;
-    }
-    .section-redirect .output-label { color: #DC2626; }
-
-    /* Connection activity */
-    .section-connection {
-      background: var(--green-bg);
-      border: 1px solid #C8E8DF;
-    }
-    .section-connection .output-label { color: var(--primary); }
-
-    /* Why this works accordion */
-    .accordion {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-    .accordion-header {
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      user-select: none;
-    }
-    .accordion-header span {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-    .accordion-icon {
-      font-size: 18px;
-      color: var(--text-soft);
-      transition: transform 0.2s;
-    }
-    .accordion.open .accordion-icon { transform: rotate(180deg); }
-    .accordion-body {
-      display: none;
-      padding: 0 20px 18px;
-      font-size: 14px;
-      color: var(--text-soft);
-      line-height: 1.65;
-    }
-    .accordion.open .accordion-body { display: block; }
-
-    /* Action buttons */
-    .action-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 8px;
-    }
-    .btn-secondary {
-      flex: 1;
-      padding: 13px;
-      border-radius: var(--radius);
-      border: 2px solid var(--border);
-      background: transparent;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-soft);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-secondary:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-    .btn-primary-outline {
-      flex: 1;
-      padding: 13px;
-      border-radius: var(--radius);
-      border: 2px solid var(--accent);
-      background: transparent;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--accent);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-primary-outline:hover {
-      background: var(--accent-light);
-    }
-
-    /* Error */
-    .error-msg {
-      display: none;
-      background: #FFF5F5;
-      border: 1px solid #FECACA;
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      color: #DC2626;
-      font-size: 15px;
-      margin-bottom: 16px;
-    }
-    .error-msg.visible { display: block; }
-
-    @media (max-width: 400px) {
-      .container { padding: 16px 14px 48px; }
-      .age-btn { width: 44px; height: 44px; font-size: 15px; }
-    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div id="root"></div>
 
-    <!-- Header -->
-    <div class="header">
-      <div class="logo">🎭</div>
-      <h1>ImaginPlay</h1>
-      <p>Play ideas grounded in child development</p>
-    </div>
+  <!-- Tweaks panel (design tool helper — also exposes theme switching) -->
+  <script type="text/babel">
+    const __TWEAKS_STYLE = `
+      .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+        max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+        background:rgba(250,249,247,.78);color:#29261b;
+        -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+        border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+        box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+        font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+      .twk-hd{display:flex;align-items:center;justify-content:space-between;
+        padding:10px 8px 10px 14px;cursor:move;user-select:none}
+      .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+      .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+        width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+      .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+      .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+        overflow-y:auto;overflow-x:hidden;min-height:0}
+      .twk-row{display:flex;flex-direction:column;gap:5px}
+      .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+      .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+      .twk-lbl>span:first-child{font-weight:500}
+      .twk-val{color:rgba(41,38,27,.5)}
+      .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+        color:rgba(41,38,27,.45);padding:10px 0 0}
+      .twk-sect:first-child{padding-top:0}
+      .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+        border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+        background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+      .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+      .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+        border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+      .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+        width:14px;height:14px;border-radius:50%;background:#fff;
+        border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+      .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;background:rgba(0,0,0,.06);user-select:none}
+      .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+        background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+        transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+      .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+        background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+        border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2}
+      .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+        background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+      .twk-toggle[data-on="1"]{background:#34c759}
+      .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+        background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+      .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+    `;
 
-    <!-- Form -->
-    <div id="form-section">
+    function useTweaks(defaults) {
+      const [values, setValues] = React.useState(defaults);
+      const setTweak = React.useCallback((keyOrEdits, val) => {
+        const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+          ? keyOrEdits : { [keyOrEdits]: val };
+        setValues((prev) => ({ ...prev, ...edits }));
+        window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+      }, []);
+      return [values, setTweak];
+    }
 
-      <!-- Child Profile -->
-      <div class="card">
-        <div class="card-title">About your child</div>
+    function TweaksPanel({ title = 'Tweaks', children }) {
+      const [open, setOpen] = React.useState(false);
+      const dragRef = React.useRef(null);
+      const offsetRef = React.useRef({ x: 16, y: 16 });
+      const PAD = 16;
 
-        <div class="field">
-          <label>Name <span class="label-hint">(optional)</span></label>
-          <input type="text" id="child-name" placeholder="e.g. Maya" />
-        </div>
+      const clampToViewport = React.useCallback(() => {
+        const panel = dragRef.current;
+        if (!panel) return;
+        const w = panel.offsetWidth, h = panel.offsetHeight;
+        const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+        const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+        offsetRef.current = {
+          x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+          y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+        };
+        panel.style.right = offsetRef.current.x + 'px';
+        panel.style.bottom = offsetRef.current.y + 'px';
+      }, []);
 
-        <div class="field">
-          <label>Age</label>
-          <div class="age-grid" id="age-grid">
-            <button class="age-btn" data-age="2">2</button>
-            <button class="age-btn" data-age="3">3</button>
-            <button class="age-btn" data-age="4">4</button>
-            <button class="age-btn" data-age="5">5</button>
-            <button class="age-btn" data-age="6">6</button>
-            <button class="age-btn" data-age="7">7</button>
-            <button class="age-btn" data-age="8">8</button>
+      React.useEffect(() => {
+        if (!open) return;
+        clampToViewport();
+        const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(clampToViewport) : null;
+        if (ro) { ro.observe(document.documentElement); return () => ro.disconnect(); }
+        window.addEventListener('resize', clampToViewport);
+        return () => window.removeEventListener('resize', clampToViewport);
+      }, [open, clampToViewport]);
+
+      React.useEffect(() => {
+        const onMsg = (e) => {
+          const t = e?.data?.type;
+          if (t === '__activate_edit_mode') setOpen(true);
+          else if (t === '__deactivate_edit_mode') setOpen(false);
+        };
+        window.addEventListener('message', onMsg);
+        window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+        return () => window.removeEventListener('message', onMsg);
+      }, []);
+
+      const dismiss = () => {
+        setOpen(false);
+        window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+      };
+
+      const onDragStart = (e) => {
+        const panel = dragRef.current;
+        if (!panel) return;
+        const r = panel.getBoundingClientRect();
+        const sx = e.clientX, sy = e.clientY;
+        const startRight = window.innerWidth - r.right;
+        const startBottom = window.innerHeight - r.bottom;
+        const move = (ev) => {
+          offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) };
+          clampToViewport();
+        };
+        const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', up);
+      };
+
+      if (!open) return null;
+      return (
+        <>
+          <style>{__TWEAKS_STYLE}</style>
+          <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+            <div className="twk-hd" onMouseDown={onDragStart}>
+              <b>{title}</b>
+              <button className="twk-x" onMouseDown={e => e.stopPropagation()} onClick={dismiss}>✕</button>
+            </div>
+            <div className="twk-body">{children}</div>
           </div>
-        </div>
+        </>
+      );
+    }
 
-        <div class="field">
-          <label>Temperament <span class="label-hint">(pick one or two)</span></label>
-          <div class="chip-grid" id="temperament-grid">
-            <div class="chip" data-value="sensitive">Sensitive</div>
-            <div class="chip" data-value="bold">Bold</div>
-            <div class="chip" data-value="energetic">Energetic</div>
-            <div class="chip" data-value="cautious">Cautious</div>
-            <div class="chip" data-value="social">Social</div>
-            <div class="chip" data-value="independent">Independent</div>
+    function TweakSection({ label, children }) {
+      return <><div className="twk-sect">{label}</div>{children}</>;
+    }
+
+    function TweakRow({ label, value, children, inline = false }) {
+      return (
+        <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+          <div className="twk-lbl">
+            <span>{label}</span>
+            {value != null && <span className="twk-val">{value}</span>}
           </div>
+          {children}
         </div>
+      );
+    }
 
-        <div class="field">
-          <label>Loves to play with <span class="label-hint">(toys, figures, characters)</span></label>
-          <input type="text" id="loves-play" placeholder="e.g. stuffed rabbit, small dinosaur figures, doctor kit" />
-        </div>
+    function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+      return (
+        <TweakRow label={label} value={`${value}${unit}`}>
+          <input type="range" className="twk-slider" min={min} max={max} step={step}
+                 value={value} onChange={e => onChange(Number(e.target.value))} />
+        </TweakRow>
+      );
+    }
 
-        <div class="field">
-          <label>Into right now <span class="label-hint">(shows, games, themes)</span></label>
-          <input type="text" id="loves-now" placeholder="e.g. Bluey, Minecraft, football, dinosaurs" />
-        </div>
-      </div>
-
-      <!-- Today's Session -->
-      <div class="card">
-        <div class="card-title">Today's session</div>
-
-        <div class="field">
-          <label>What do you want play to help your child with today?</label>
-          <textarea id="play-goal" placeholder="e.g. She has a new fear of someone breaking into the house. She cries at night about it." rows="3"></textarea>
-        </div>
-
-        <div class="field">
-          <label>When are you thinking of playing?</label>
-          <div class="timing-grid" id="timing-grid">
-            <button class="timing-btn" data-timing="right now">
-              <span class="emoji">⚡</span>
-              <div>
-                <div style="font-weight:600">Right now</div>
-                <div style="font-size:13px;font-weight:400;color:var(--text-soft)">We're about to play</div>
-              </div>
-            </button>
-            <button class="timing-btn" data-timing="later today">
-              <span class="emoji">📅</span>
-              <div>
-                <div style="font-weight:600">Later today</div>
-                <div style="font-size:13px;font-weight:400;color:var(--text-soft)">Planning ahead</div>
-              </div>
-            </button>
-            <button class="timing-btn" data-timing="just exploring">
-              <span class="emoji">💡</span>
-              <div>
-                <div style="font-weight:600">Just exploring ideas</div>
-                <div style="font-size:13px;font-weight:400;color:var(--text-soft)">No specific time in mind</div>
-              </div>
-            </button>
+    function TweakRadio({ label, value, options, onChange }) {
+      const trackRef = React.useRef(null);
+      const [dragging, setDragging] = React.useState(false);
+      const opts = options.map(o => typeof o === 'object' ? o : { value: o, label: o });
+      const idx = Math.max(0, opts.findIndex(o => o.value === value));
+      const n = opts.length;
+      const valueRef = React.useRef(value);
+      valueRef.current = value;
+      const segAt = clientX => {
+        const r = trackRef.current.getBoundingClientRect();
+        const i = Math.floor(((clientX - r.left - 2) / (r.width - 4)) * n);
+        return opts[Math.max(0, Math.min(n - 1, i))].value;
+      };
+      const onPointerDown = e => {
+        setDragging(true);
+        const v0 = segAt(e.clientX);
+        if (v0 !== valueRef.current) onChange(v0);
+        const move = ev => { if (trackRef.current) { const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); } };
+        const up = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+        window.addEventListener('pointermove', move);
+        window.addEventListener('pointerup', up);
+      };
+      return (
+        <TweakRow label={label}>
+          <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+               className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+            <div className="twk-seg-thumb"
+                 style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }} />
+            {opts.map(o => <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>)}
           </div>
-        </div>
+        </TweakRow>
+      );
+    }
 
-        <!-- If right now -->
-        <div class="conditional" id="energy-section">
-          <label>How are they right now?</label>
-          <div class="option-grid" id="energy-grid">
-            <button class="option-btn" data-energy="wound up">🌪 Wound up</button>
-            <button class="option-btn" data-energy="calm">😌 Calm</button>
-            <button class="option-btn" data-energy="tired">😴 Tired</button>
-          </div>
-        </div>
+    function TweakText({ label, value, placeholder, onChange }) {
+      return (
+        <TweakRow label={label}>
+          <input className="twk-field" type="text" value={value} placeholder={placeholder || ''}
+                 onChange={e => onChange(e.target.value)} />
+        </TweakRow>
+      );
+    }
 
-        <!-- If later today -->
-        <div class="conditional" id="location-section">
-          <label>Where will you be?</label>
-          <div class="option-grid" id="location-grid">
-            <button class="option-btn" data-location="at home">🏠 At home</button>
-            <button class="option-btn" data-location="outside">🌳 Outside</button>
-            <button class="option-btn" data-location="in the car">🚗 In the car</button>
-            <button class="option-btn" data-location="not sure yet">🤷 Not sure yet</button>
-          </div>
-        </div>
+    Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSlider, TweakRadio, TweakText });
+  </script>
 
-      </div>
+  <!-- Main app -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
 
-      <!-- Error -->
-      <div class="error-msg" id="error-msg">
-        Something went wrong. Please check your inputs and try again.
-      </div>
+    // ─── THEMES ───────────────────────────────────────────────────────────────
+    const THEMES = {
+      storybook: {
+        '--bg': '#F8F5EF', '--bg-card': '#FDFAF4',
+        '--primary': '#2A4849', '--primary-light': '#E4EDEB',
+        '--accent': '#C86B3A', '--accent-light': '#F7EDE6',
+        '--gold': '#B48A38', '--gold-light': '#F7F0DC',
+        '--text': '#1E1A14', '--text-soft': '#6B5E4A',
+        '--border': '#E2D8C8', '--sage': '#ECF3EF', '--sage-border': '#BDD5C8',
+      },
+      studio: {
+        '--bg': '#F4F5F8', '--bg-card': '#FFFFFF',
+        '--primary': '#1A2744', '--primary-light': '#E6EAF5',
+        '--accent': '#C9702E', '--accent-light': '#F9EDE4',
+        '--gold': '#B08A28', '--gold-light': '#F8F2DA',
+        '--text': '#0F1117', '--text-soft': '#5C6579',
+        '--border': '#DDE3EE', '--sage': '#E8F2EC', '--sage-border': '#B4D0C0',
+      },
+      field: {
+        '--bg': '#FAF5E8', '--bg-card': '#FFFDF5',
+        '--primary': '#2B6E88', '--primary-light': '#DCF0F8',
+        '--accent': '#C97030', '--accent-light': '#F8ECE0',
+        '--gold': '#C09A28', '--gold-light': '#FBF5DC',
+        '--text': '#18282E', '--text-soft': '#5C7A88',
+        '--border': '#D0E8F0', '--sage': '#E0F4E8', '--sage-border': '#A4D4B8',
+      },
+    };
 
-      <button class="submit-btn" id="submit-btn" onclick="submitForm()">
-        Find a play idea →
-      </button>
-    </div>
+    // ─── QUESTIONS ────────────────────────────────────────────────────────────
+    const QUESTIONS = [
+      { id: 'name',        type: 'text',     optional: true,  autoNext: false,
+        question: "What's your child's name?",
+        hint: "Optional — makes things feel more personal",
+        placeholder: "e.g. Maya" },
+      { id: 'age',         type: 'age',      optional: false, autoNext: true,
+        question: "How old are they?",
+        ages: [2,3,4,5,6,7,8] },
+      { id: 'temperament', type: 'chips',    optional: true,  autoNext: false,
+        question: "How would you describe them?",
+        hint: "Pick one or two that fit best",
+        options: ['Sensitive','Bold','Energetic','Cautious','Social','Independent'], max: 2 },
+      { id: 'loves_play',  type: 'text',     optional: true,  autoNext: false,
+        question: "What do they love playing with?",
+        hint: "Specific toys, figures, props they always return to",
+        placeholder: "e.g. stuffed rabbit, dinosaur figures, doctor kit" },
+      { id: 'loves_now',   type: 'text',     optional: true,  autoNext: false,
+        question: "What are they into right now?",
+        hint: "Shows, games, characters, themes — anything",
+        placeholder: "e.g. Bluey, Minecraft, football, space" },
+      { id: 'goal',        type: 'textarea', optional: false, autoNext: false,
+        question: "What do you want play to help with today?",
+        hint: "The more specific you are, the better the idea",
+        placeholder: "e.g. She's been scared of someone breaking into the house. She cries at night. I want to help her process that fear through play." },
+      { id: 'timing',      type: 'timing',   optional: false, autoNext: true,
+        question: "When are you thinking of playing?",
+        options: [
+          { value: 'right now',      label: 'Right now',      sub: "We're about to play",     icon: '⚡' },
+          { value: 'later today',    label: 'Later today',    sub: "Planning ahead",           icon: '☀' },
+          { value: 'just exploring', label: 'Just exploring', sub: "No specific time in mind", icon: '✦' },
+        ] },
+      { id: 'energy',    type: 'option', optional: true, autoNext: true,
+        condition: a => a.timing === 'right now',
+        question: "How are they right now?",
+        hint: "Helps match the play to their current state",
+        options: [
+          { value: 'wound up', label: 'Wound up' },
+          { value: 'calm',     label: 'Calm'     },
+          { value: 'tired',    label: 'Tired'    },
+        ] },
+      { id: 'location',  type: 'option', optional: true, autoNext: true,
+        condition: a => a.timing === 'later today',
+        question: "Where will you be?",
+        options: [
+          { value: 'at home',      label: 'At home'      },
+          { value: 'outside',      label: 'Outside'      },
+          { value: 'in the car',   label: 'In the car'   },
+          { value: 'not sure yet', label: 'Not sure yet' },
+        ] },
+    ];
 
-    <!-- Loading -->
-    <div class="loading" id="loading">
-      <div class="loading-dots">
-        <span></span><span></span><span></span>
-      </div>
-      <p>Finding the perfect play idea<br><strong id="loading-name"></strong></p>
-    </div>
+    function getActiveQuestions(answers) {
+      return QUESTIONS.filter(q => !q.condition || q.condition(answers));
+    }
 
-    <!-- Output -->
-    <div class="output" id="output-section">
-      <div id="output-content"></div>
-
-      <div class="action-row">
-        <button class="btn-secondary" onclick="resetForm()">← Start over</button>
-        <button class="btn-primary-outline" onclick="tryAgain()">Try a different idea</button>
-      </div>
-    </div>
-
-  </div>
-
-  <script>
-    // State
-    let selectedAge = null;
-    let selectedTemperament = [];
-    let selectedTiming = null;
-    let selectedEnergy = null;
-    let selectedLocation = null;
-    let lastUserMessage = null;
-
-    // Age buttons
-    document.querySelectorAll('.age-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedAge = btn.dataset.age;
-      });
-    });
-
-    // Temperament chips
-    document.querySelectorAll('#temperament-grid .chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        const val = chip.dataset.value;
-        if (chip.classList.contains('selected')) {
-          chip.classList.remove('selected');
-          selectedTemperament = selectedTemperament.filter(t => t !== val);
-        } else if (selectedTemperament.length < 2) {
-          chip.classList.add('selected');
-          selectedTemperament.push(val);
-        }
-      });
-    });
-
-    // Timing buttons
-    document.querySelectorAll('.timing-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.timing-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedTiming = btn.dataset.timing;
-        selectedEnergy = null;
-        selectedLocation = null;
-        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-
-        document.getElementById('energy-section').classList.toggle('visible', selectedTiming === 'right now');
-        document.getElementById('location-section').classList.toggle('visible', selectedTiming === 'later today');
-      });
-    });
-
-    // Energy buttons
-    document.querySelectorAll('#energy-grid .option-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#energy-grid .option-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedEnergy = btn.dataset.energy;
-      });
-    });
-
-    // Location buttons
-    document.querySelectorAll('#location-grid .option-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#location-grid .option-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedLocation = btn.dataset.location;
-      });
-    });
-
-    // Build user message
-    function buildUserMessage() {
-      const name = document.getElementById('child-name').value.trim();
-      const goal = document.getElementById('play-goal').value.trim();
-      const lovesPlay = document.getElementById('loves-play').value.trim();
-      const lovesNow = document.getElementById('loves-now').value.trim();
-
+    // ─── HELPERS ─────────────────────────────────────────────────────────────
+    function buildUserMessage(answers) {
+      const { name, age, temperament, loves_play, loves_now, goal, timing, energy, location } = answers;
       let msg = '--- ABOUT MY CHILD ---\n';
       if (name) msg += `Name: ${name}\n`;
-      msg += `Age: ${selectedAge}\n`;
-      if (selectedTemperament.length > 0) msg += `Temperament: ${selectedTemperament.join(', ')}\n`;
-      if (lovesPlay) msg += `Loves to play with: ${lovesPlay}\n`;
-      if (lovesNow) msg += `Into right now: ${lovesNow}\n`;
-
-      msg += '\n--- TODAY\'S SESSION ---\n';
+      msg += `Age: ${age}\n`;
+      if (temperament?.length) msg += `Temperament: ${temperament.join(', ')}\n`;
+      if (loves_play) msg += `Loves to play with: ${loves_play}\n`;
+      if (loves_now)  msg += `Into right now: ${loves_now}\n`;
+      msg += "\n--- TODAY'S SESSION ---\n";
       msg += `What I want play to help with: ${goal}\n`;
-      msg += `When we are playing: ${selectedTiming}\n`;
-
-      if (selectedTiming === 'right now' && selectedEnergy) {
-        msg += `How they are right now: ${selectedEnergy}\n`;
-      }
-      if (selectedTiming === 'later today' && selectedLocation) {
-        msg += `Where we will be: ${selectedLocation}\n`;
-      }
-
+      msg += `When we are playing: ${timing}\n`;
+      if (timing === 'right now'   && energy)   msg += `How they are right now: ${energy}\n`;
+      if (timing === 'later today' && location) msg += `Where we will be: ${location}\n`;
       return msg;
     }
 
-    // Validate
-    function validate() {
-      const goal = document.getElementById('play-goal').value.trim();
-      if (!selectedAge) { showError('Please select your child\'s age.'); return false; }
-      if (!goal) { showError('Please describe what you\'d like play to help with.'); return false; }
-      if (!selectedTiming) { showError('Please select when you\'re planning to play.'); return false; }
-      return true;
+    async function generatePlayIdea(userMessage, apiUrl) {
+      const url = (apiUrl && apiUrl.trim()) ? apiUrl.trim() : '/api/generate';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userMessage }),
+      });
+      const result = await res.json();
+      if (result.success && result.data) return result.data;
+      if (result.raw) {
+        const c = result.raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+        return JSON.parse(c);
+      }
+      throw new Error(result.error || 'API error');
     }
 
-    function showError(msg) {
-      const el = document.getElementById('error-msg');
-      el.textContent = msg;
-      el.classList.add('visible');
+    // ─── SPEECH INPUT ─────────────────────────────────────────────────────────
+    function useSpeechInput(onResult) {
+      const [listening, setListening] = useState(false);
+      const recRef = useRef(null);
+      const supported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+      function toggle() {
+        if (listening) { recRef.current?.stop(); setListening(false); return; }
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SR) return;
+        const rec = new SR();
+        rec.lang = 'en-US';
+        rec.interimResults = false;
+        rec.continuous = false;
+        rec.onresult = e => { onResult(e.results[0][0].transcript); setListening(false); };
+        rec.onerror = () => setListening(false);
+        rec.onend   = () => setListening(false);
+        recRef.current = rec;
+        rec.start();
+        setListening(true);
+      }
+      return { listening, toggle, supported };
     }
 
-    function hideError() {
-      document.getElementById('error-msg').classList.remove('visible');
+    function MicButton({ onResult, style: extraStyle = {} }) {
+      const { listening, toggle, supported } = useSpeechInput(onResult);
+      if (!supported) return null;
+      return (
+        <button onClick={toggle} title={listening ? 'Stop recording' : 'Speak your answer'} style={{
+          flexShrink: 0, width: 40, height: 40, borderRadius: '50%', border: 'none',
+          background: listening ? 'var(--accent)' : 'var(--primary-light)',
+          color:       listening ? 'white'        : 'var(--primary)',
+          cursor: 'pointer', fontSize: 17, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: listening ? '0 0 0 6px var(--accent-light)' : 'none',
+          animation: listening ? 'breathe 1.4s ease-in-out infinite' : 'none',
+          transition: 'all 0.2s', ...extraStyle,
+        }}>
+          {listening ? '◼' : '🎙'}
+        </button>
+      );
     }
 
-    // Submit
-    async function submitForm() {
-      hideError();
-      if (!validate()) return;
+    // ─── LOGO ─────────────────────────────────────────────────────────────────
+    function Logo({ size = 'md', dark = false }) {
+      const sz = { sm: [18, 20], md: [24, 28], lg: [36, 44] }[size] || [24, 28];
+      return (
+        <div style={{ display:'flex', alignItems:'center', gap: size==='lg'?10:6 }}>
+          <span style={{ fontSize:sz[0], color: dark?'rgba(255,255,255,0.8)':'var(--accent)', lineHeight:1, fontFamily:'serif' }}>✦</span>
+          <span style={{ fontFamily:'var(--font-display)', fontSize:sz[1], fontWeight:600, letterSpacing:'-0.5px',
+            color: dark?'white':'var(--primary)', lineHeight:1 }}>
+            Imagin<span style={{ fontStyle:'italic', fontWeight:400 }}>Play</span>
+          </span>
+        </div>
+      );
+    }
 
-      const name = document.getElementById('child-name').value.trim();
-      const btn = document.getElementById('submit-btn');
+    // ─── INTRO SCREEN ─────────────────────────────────────────────────────────
+    function IntroScreen({ onStart }) {
+      return (
+        <div className="anim-fade-in" style={{ minHeight:'100dvh', display:'flex', flexDirection:'column',
+          alignItems:'center', justifyContent:'center', padding:'40px 28px', position:'relative', overflow:'hidden' }}>
+          <div style={{ position:'absolute', top:'-60px', right:'-60px', width:220, height:220,
+            borderRadius:'50%', background:'var(--accent-light)', opacity:0.6, zIndex:0 }} />
+          <div style={{ position:'absolute', bottom:'-40px', left:'-40px', width:160, height:160,
+            borderRadius:'50%', background:'var(--primary-light)', opacity:0.7, zIndex:0 }} />
+          <div style={{ position:'relative', zIndex:1, textAlign:'center', maxWidth:340 }}>
+            <div style={{ marginBottom:32 }}>
+              <div style={{ display:'inline-flex', alignItems:'center', justifyContent:'center',
+                width:72, height:72, borderRadius:'50%', background:'var(--primary)', marginBottom:20,
+                boxShadow:'0 8px 32px rgba(42,72,73,0.20)' }}>
+                <span style={{ fontSize:32, color:'white', fontFamily:'serif' }}>✦</span>
+              </div>
+              <div>
+                <span style={{ fontFamily:'var(--font-display)', fontSize:36, fontWeight:600,
+                  letterSpacing:'-1px', color:'var(--primary)', lineHeight:1 }}>
+                  Imagin<span style={{ fontStyle:'italic', fontWeight:400 }}>Play</span>
+                </span>
+              </div>
+            </div>
+            <h1 style={{ fontFamily:'var(--font-display)', fontSize:26, fontWeight:500,
+              lineHeight:1.35, color:'var(--text)', letterSpacing:'-0.3px', marginBottom:16 }}>
+              Turn everyday moments into play that helps your child grow.
+            </h1>
+            <p style={{ fontSize:15, color:'var(--text-soft)', lineHeight:1.65, marginBottom:10 }}>
+              Answer a few questions. Get a play idea rooted in child development that you can start right now.
+            </p>
+            <div style={{ margin:'24px 0 32px', padding:'14px 18px', background:'var(--primary-light)',
+              borderRadius:12, borderLeft:'3px solid var(--primary)' }}>
+              <p style={{ fontSize:13.5, color:'var(--primary)', lineHeight:1.6, fontStyle:'italic', fontFamily:'var(--font-display)' }}>
+                "The best play happens when parents show up fully — not just watching, but inside the story."
+              </p>
+            </div>
+            <button onClick={onStart} style={{
+              width:'100%', padding:'16px 24px', background:'var(--primary)', color:'white',
+              border:'none', borderRadius:14, fontSize:17, fontWeight:600, fontFamily:'var(--font-ui)',
+              cursor:'pointer', letterSpacing:'-0.2px', boxShadow:'0 6px 24px rgba(42,72,73,0.25)', transition:'all 0.2s',
+            }}
+              onMouseEnter={e => e.currentTarget.style.transform='translateY(-2px)'}
+              onMouseLeave={e => e.currentTarget.style.transform='translateY(0)'}
+            >
+              Find a play idea →
+            </button>
+            <p style={{ marginTop:20, fontSize:12.5, color:'var(--text-soft)', letterSpacing:'0.3px' }}>
+              17 play archetypes · Ages 2–8 · Based on child development research
+            </p>
+          </div>
+        </div>
+      );
+    }
 
-      lastUserMessage = buildUserMessage();
+    // ─── PROGRESS BAR ─────────────────────────────────────────────────────────
+    function ProgressBar({ step, total }) {
+      const pct = total > 1 ? (step / (total - 1)) * 100 : 100;
+      return (
+        <div style={{ height:3, background:'var(--border)', borderRadius:2, overflow:'hidden' }}>
+          <div style={{ height:'100%', background:'var(--primary)', borderRadius:2,
+            width:`${pct}%`, transition:'width 0.4s ease' }} />
+        </div>
+      );
+    }
 
-      // Show loading
-      document.getElementById('form-section').style.display = 'none';
-      const loading = document.getElementById('loading');
-      loading.classList.add('visible');
-      document.getElementById('loading-name').textContent = name ? `for ${name}` : '';
+    // ─── INPUT COMPONENTS ─────────────────────────────────────────────────────
+    function AgeInput({ q, value, onChange }) {
+      return (
+        <div style={{ display:'flex', flexWrap:'wrap', gap:10 }}>
+          {q.ages.map(age => (
+            <button key={age} onClick={() => onChange(String(age))} style={{
+              width:58, height:58, borderRadius:'50%', border:'2px solid',
+              borderColor: value===String(age) ? 'var(--primary)' : 'var(--border)',
+              background:  value===String(age) ? 'var(--primary)' : 'var(--bg)',
+              color:       value===String(age) ? 'white' : 'var(--text-soft)',
+              fontSize:19, fontWeight:600, fontFamily:'var(--font-ui)', cursor:'pointer', transition:'all 0.15s',
+              display:'flex', alignItems:'center', justifyContent:'center',
+            }}>{age}</button>
+          ))}
+        </div>
+      );
+    }
 
-      btn.disabled = true;
+    function ChipsInput({ q, value=[], onChange }) {
+      function toggle(opt) {
+        const cur = value||[];
+        if (cur.includes(opt)) onChange(cur.filter(v=>v!==opt));
+        else if (cur.length < (q.max||99)) onChange([...cur, opt]);
+      }
+      return (
+        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+          {q.options.map(opt => {
+            const sel = (value||[]).includes(opt);
+            return (
+              <button key={opt} onClick={() => toggle(opt)} style={{
+                padding:'9px 16px', borderRadius:24, border:'2px solid',
+                borderColor: sel ? 'var(--primary)' : 'var(--border)',
+                background:  sel ? 'var(--primary-light)' : 'var(--bg)',
+                color:       sel ? 'var(--primary)' : 'var(--text-soft)',
+                fontSize:14.5, fontWeight: sel?600:400, fontFamily:'var(--font-ui)', cursor:'pointer', transition:'all 0.15s',
+              }}>{opt}</button>
+            );
+          })}
+        </div>
+      );
+    }
 
-      try {
-        const response = await fetch('/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userMessage: lastUserMessage })
-        });
+    function TimingInput({ q, value, onChange }) {
+      return (
+        <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+          {q.options.map(opt => {
+            const sel = value===opt.value;
+            return (
+              <button key={opt.value} onClick={() => onChange(opt.value)} style={{
+                padding:'15px 18px', borderRadius:14, border:'2px solid',
+                borderColor: sel ? 'var(--primary)' : 'var(--border)',
+                background:  sel ? 'var(--primary-light)' : 'var(--bg)',
+                cursor:'pointer', display:'flex', alignItems:'center', gap:14,
+                textAlign:'left', transition:'all 0.15s', fontFamily:'var(--font-ui)',
+              }}>
+                <span style={{ fontSize:22, flexShrink:0, lineHeight:1 }}>{opt.icon}</span>
+                <div>
+                  <div style={{ fontSize:15.5, fontWeight:600, color: sel?'var(--primary)':'var(--text)' }}>{opt.label}</div>
+                  <div style={{ fontSize:13, color:'var(--text-soft)', marginTop:1 }}>{opt.sub}</div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      );
+    }
 
-        const result = await response.json();
-        loading.classList.remove('visible');
+    function OptionInput({ q, value, onChange }) {
+      return (
+        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+          {q.options.map(opt => {
+            const sel = value===opt.value;
+            return (
+              <button key={opt.value} onClick={() => onChange(opt.value)} style={{
+                padding:'11px 18px', borderRadius:12, border:'2px solid',
+                borderColor: sel ? 'var(--primary)' : 'var(--border)',
+                background:  sel ? 'var(--primary-light)' : 'var(--bg)',
+                color:       sel ? 'var(--primary)' : 'var(--text-soft)',
+                fontSize:14.5, fontWeight: sel?600:400, fontFamily:'var(--font-ui)', cursor:'pointer', transition:'all 0.15s',
+              }}>{opt.label}</button>
+            );
+          })}
+        </div>
+      );
+    }
 
-        if (result.success && result.data) {
-          renderOutput(result.data, name);
-        } else if (result.raw) {
-          renderRawOutput(result.raw);
-        } else {
-          showFormWithError(result.error || 'Something went wrong. Please try again.');
-        }
+    function TextInput({ q, value, onChange }) {
+      const ref = useRef(null);
+      useEffect(() => { setTimeout(() => ref.current?.focus(), 120); }, []);
+      return (
+        <div style={{ display:'flex', gap:10, alignItems:'center' }}>
+          <input ref={ref} type="text" value={value||''} onChange={e => onChange(e.target.value)}
+            placeholder={q.placeholder||''}
+            onKeyDown={e => { if (e.key==='Enter' && q.optional) e.target.blur(); }}
+            style={{ flex:1, padding:'14px 16px', border:'2px solid var(--border)', borderRadius:12,
+              fontSize:15.5, fontFamily:'var(--font-ui)', color:'var(--text)', background:'var(--bg)',
+              outline:'none', transition:'border-color 0.2s' }}
+            onFocus={e => e.target.style.borderColor='var(--primary)'}
+            onBlur={e  => e.target.style.borderColor='var(--border)'}
+          />
+          <MicButton onResult={t => onChange((value||'') + (value ? ' ' : '') + t)} />
+        </div>
+      );
+    }
 
-      } catch {
-        loading.classList.remove('visible');
-        showFormWithError('Could not connect. Please check your internet and try again.');
+    function TextareaInput({ q, value, onChange }) {
+      const ref = useRef(null);
+      useEffect(() => { setTimeout(() => ref.current?.focus(), 120); }, []);
+      return (
+        <div style={{ position:'relative' }}>
+          <textarea ref={ref} value={value||''} onChange={e => onChange(e.target.value)}
+            placeholder={q.placeholder||''} rows={5}
+            style={{ width:'100%', padding:'14px 16px', border:'2px solid var(--border)', borderRadius:12,
+              fontSize:15.5, fontFamily:'var(--font-ui)', color:'var(--text)', background:'var(--bg)',
+              outline:'none', resize:'vertical', lineHeight:1.6, transition:'border-color 0.2s' }}
+            onFocus={e => e.target.style.borderColor='var(--primary)'}
+            onBlur={e  => e.target.style.borderColor='var(--border)'}
+          />
+          <div style={{ display:'flex', justifyContent:'flex-end', marginTop:8 }}>
+            <MicButton onResult={t => onChange((value||'') + (value ? ' ' : '') + t)} />
+          </div>
+        </div>
+      );
+    }
+
+    // ─── QUESTION CARD ────────────────────────────────────────────────────────
+    function QuestionCard({ q, stepIndex, total, answers, onAnswer, onContinue, onBack, error }) {
+      const value = answers[q.id];
+
+      function handleChange(val) { onAnswer(q.id, val); }
+      function handleSingleSelect(val) {
+        onAnswer(q.id, val);
+        setTimeout(() => onContinue(val, q.id), 280);
       }
 
-      btn.disabled = false;
+      const canContinue = q.optional || (value && (Array.isArray(value) ? value.length>0 : String(value).trim().length>0));
+      const isLast = stepIndex === total - 1;
+
+      const inputEl = (() => {
+        if (q.type==='age')      return <AgeInput q={q} value={value} onChange={handleSingleSelect} />;
+        if (q.type==='chips')    return <ChipsInput q={q} value={value} onChange={handleChange} />;
+        if (q.type==='timing')   return <TimingInput q={q} value={value} onChange={handleSingleSelect} />;
+        if (q.type==='option')   return <OptionInput q={q} value={value} onChange={handleSingleSelect} />;
+        if (q.type==='textarea') return <TextareaInput q={q} value={value} onChange={handleChange} />;
+        return <TextInput q={q} value={value} onChange={handleChange} />;
+      })();
+
+      const showButtons = !q.autoNext || q.type==='chips';
+
+      return (
+        <div className="anim-fade-up" style={{ display:'flex', flexDirection:'column',
+          minHeight:'100dvh', padding:'0 24px 40px' }}>
+          <div style={{ padding:'16px 0 24px' }}>
+            <ProgressBar step={stepIndex} total={total} />
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:12 }}>
+              {stepIndex > 0
+                ? <button onClick={onBack} style={{ background:'none', border:'none', cursor:'pointer',
+                    color:'var(--text-soft)', fontSize:14, fontFamily:'var(--font-ui)', padding:0 }}>← Back</button>
+                : <div />}
+              <span style={{ fontSize:13, color:'var(--text-soft)', fontFamily:'var(--font-ui)' }}>
+                {stepIndex+1} / {total}
+              </span>
+            </div>
+          </div>
+          <div style={{ flex:1 }}>
+            <h2 style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:500,
+              lineHeight:1.35, color:'var(--text)', letterSpacing:'-0.3px', marginBottom: q.hint?8:24 }}>
+              {q.question}
+            </h2>
+            {q.hint && <p style={{ fontSize:14, color:'var(--text-soft)', marginBottom:22, lineHeight:1.5 }}>{q.hint}</p>}
+            {inputEl}
+            {error && <p style={{ marginTop:12, fontSize:14, color:'#C04040' }}>{error}</p>}
+          </div>
+          {showButtons && (
+            <div style={{ display:'flex', gap:10, marginTop:32 }}>
+              {q.optional && (q.type==='text' || q.type==='textarea') && (
+                <button onClick={() => onContinue(value, q.id)} style={{
+                  flex:1, padding:'14px', borderRadius:12, border:'2px solid var(--border)',
+                  background:'transparent', fontSize:15, fontWeight:500, color:'var(--text-soft)',
+                  cursor:'pointer', fontFamily:'var(--font-ui)',
+                }}>Skip →</button>
+              )}
+              <button onClick={() => onContinue(value, q.id)} disabled={!canContinue} style={{
+                flex:2, padding:'15px', borderRadius:12, border:'none',
+                background: canContinue ? 'var(--primary)' : 'var(--border)',
+                color:       canContinue ? 'white' : 'var(--text-soft)',
+                fontSize:16, fontWeight:600, fontFamily:'var(--font-ui)',
+                cursor: canContinue ? 'pointer' : 'not-allowed', transition:'all 0.2s',
+              }}>
+                {isLast ? 'Find a play idea →' : 'Continue →'}
+              </button>
+            </div>
+          )}
+        </div>
+      );
     }
 
-    function showFormWithError(msg) {
-      document.getElementById('form-section').style.display = 'block';
-      showError(msg);
+    // ─── LOADING SCREEN ───────────────────────────────────────────────────────
+    const LOADING_MSGS = [
+      "Reading between the lines…",
+      "Finding the right approach…",
+      "Consulting the research…",
+      "Crafting something just for you…",
+      "Almost ready…",
+    ];
+
+    function LoadingScreen({ name }) {
+      const [msgIdx, setMsgIdx] = useState(0);
+      useEffect(() => {
+        const t = setInterval(() => setMsgIdx(i => (i+1) % LOADING_MSGS.length), 2200);
+        return () => clearInterval(t);
+      }, []);
+      return (
+        <div className="anim-fade-in" style={{ minHeight:'100dvh', display:'flex', flexDirection:'column',
+          alignItems:'center', justifyContent:'center', padding:'40px 28px', textAlign:'center' }}>
+          <div style={{ width:80, height:80, borderRadius:'50%', background:'var(--primary)',
+            display:'flex', alignItems:'center', justifyContent:'center', marginBottom:36,
+            animation:'breathe 2.4s ease-in-out infinite', boxShadow:'0 8px 32px rgba(42,72,73,0.20)' }}>
+            <span style={{ fontSize:34, color:'white', fontFamily:'serif' }}>✦</span>
+          </div>
+          <div style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:500,
+            color:'var(--text)', marginBottom:8, letterSpacing:'-0.2px' }}>
+            {name ? `Finding an idea for ${name}…` : 'Finding your play idea…'}
+          </div>
+          <div key={msgIdx} className="anim-fade-in" style={{ fontSize:14.5, color:'var(--text-soft)' }}>
+            {LOADING_MSGS[msgIdx]}
+          </div>
+          <div style={{ display:'flex', gap:8, marginTop:40 }}>
+            {[0,1,2].map(i => (
+              <div key={i} style={{ width:8, height:8, borderRadius:'50%', background:'var(--primary)',
+                animation:'dotPulse 1.4s ease-in-out infinite', animationDelay:`${i*0.2}s` }} />
+            ))}
+          </div>
+        </div>
+      );
     }
 
-    // Try again
-    async function tryAgain() {
-      if (!lastUserMessage) return;
-
-      document.getElementById('output-section').classList.remove('visible');
-      const loading = document.getElementById('loading');
-      loading.classList.add('visible');
-
-      try {
-        const response = await fetch('/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userMessage: lastUserMessage + '\n\nPlease suggest a completely different approach or archetype from your previous suggestion.' })
-        });
-
-        const result = await response.json();
-        loading.classList.remove('visible');
-
-        const name = document.getElementById('child-name').value.trim();
-        if (result.success && result.data) {
-          renderOutput(result.data, name);
-        } else {
-          document.getElementById('output-section').classList.add('visible');
-        }
-
-      } catch {
-        loading.classList.remove('visible');
-        document.getElementById('output-section').classList.add('visible');
-      }
+    // ─── OUTPUT CARD ──────────────────────────────────────────────────────────
+    function WhyAccordion({ text }) {
+      const [open, setOpen] = useState(false);
+      return (
+        <div style={{ marginTop:4 }}>
+          <button onClick={() => setOpen(o=>!o)} style={{
+            background:'none', border:'none', cursor:'pointer', padding:'8px 0',
+            display:'flex', alignItems:'center', gap:8, fontFamily:'var(--font-ui)',
+          }}>
+            <span style={{ fontSize:12, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.8px',
+              color:'var(--text-soft)' }}>The research behind this</span>
+            <span style={{ fontSize:14, color:'var(--text-soft)', transition:'transform 0.2s',
+              display:'inline-block', transform: open ? 'rotate(180deg)' : 'none' }}>⌄</span>
+          </button>
+          {open && (
+            <div className="anim-fade-down" style={{ fontSize:14, color:'var(--text-soft)',
+              lineHeight:1.7, paddingTop:4, paddingBottom:8 }}>
+              {text}
+            </div>
+          )}
+        </div>
+      );
     }
 
-    // Reset
-    function resetForm() {
-      document.getElementById('output-section').classList.remove('visible');
-      document.getElementById('form-section').style.display = 'block';
-      document.getElementById('output-content').innerHTML = '';
-      hideError();
-      lastUserMessage = null;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function ActionRow({ onReset, onTryAgain, loading }) {
+      return (
+        <div style={{ display:'flex', gap:10, marginTop:28, marginBottom:8, paddingTop:16, borderTop:'1px solid var(--border)' }}>
+          <button onClick={onReset} style={{
+            flex:1, padding:'13px', borderRadius:12, border:'2px solid var(--border)',
+            background:'transparent', fontSize:14, fontWeight:600, color:'var(--text-soft)',
+            cursor:'pointer', fontFamily:'var(--font-ui)',
+          }}>← Start over</button>
+          <button onClick={onTryAgain} disabled={loading} style={{
+            flex:2, padding:'13px', borderRadius:12, border:'2px solid var(--accent)',
+            background:'transparent', fontSize:14, fontWeight:600, color:'var(--accent)',
+            cursor: loading?'not-allowed':'pointer', fontFamily:'var(--font-ui)', opacity: loading?0.6:1,
+          }}>
+            {loading ? 'Finding another…' : 'Try a different idea'}
+          </button>
+        </div>
+      );
     }
 
-    // Render output
-    function renderOutput(data, name) {
-      const el = document.getElementById('output-content');
-      el.innerHTML = '';
-
-      const nameStr = name ? ` for ${name}` : '';
-
-      const headerName = name ? `for ${name}` : '';
+    function OutputCard({ data, answers, onReset, onTryAgain, loading }) {
+      const name = answers.name || '';
+      const age  = answers.age  || '';
+      useEffect(() => { window.scrollTo(0, 0); }, []);
 
       if (data.triage_tier === 3) {
-        el.innerHTML = `
-          <div class="output-header">
-            <div class="output-header-icon">💛</div>
-            <div class="output-header-text">
-              A note before we suggest play
-              <div class="output-header-sub">We want to make sure you get the right support</div>
+        return (
+          <div className="anim-fade-up" style={{ maxWidth:520, margin:'0 auto', padding:'24px 24px 60px' }}>
+            <div style={{ textAlign:'center', marginBottom:28, paddingTop:8 }}><Logo /></div>
+            <div style={{ background:'var(--gold-light)', borderRadius:14, padding:'20px 22px', marginBottom:16 }}>
+              <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px', color:'var(--gold)', marginBottom:8 }}>A note before we suggest play</div>
+              <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text)' }}>{data.this_is_normal}</p>
             </div>
+            {data.redirect_message && (
+              <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text-soft)', marginBottom:16 }}>{data.redirect_message}</p>
+            )}
+            {data.connection_activity && (
+              <div style={{ borderTop:'1px solid var(--border)', paddingTop:16 }}>
+                <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px', color:'var(--text-soft)', marginBottom:8 }}>Something simple for now</div>
+                <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text)' }}>{data.connection_activity}</p>
+              </div>
+            )}
+            <ActionRow onReset={onReset} onTryAgain={onTryAgain} loading={loading} />
           </div>
-          ${section('normal', '🌱 What you shared', data.this_is_normal)}
-          ${section('redirect', '💬 What we recommend', data.redirect_message)}
-          ${data.connection_activity ? section('connection', '🤝 Something simple for now', data.connection_activity) : ''}
-        `;
-      } else {
-        const isTier2 = data.triage_tier === 2;
-
-        el.innerHTML = `
-          <div class="output-header">
-            <div class="output-header-icon">🎮</div>
-            <div class="output-header-text">
-              Here's your play idea${headerName ? ' ' + headerName : ''}
-              <div class="output-header-sub">Tap any section to read more — scroll down for the full plan</div>
-            </div>
-          </div>
-          ${section('normal', '🌱 This is normal', data.this_is_normal)}
-          ${data.the_spark ? section('spark', '⚡ The spark', data.the_spark) : ''}
-          ${data.the_why ? section('why', '💡 Why this works for your child', data.the_why) : ''}
-          ${data.how_it_unfolds ? shapeSection(data.how_it_unfolds, data.roles) : ''}
-          ${data.one_thing_to_watch ? section('watch', '👀 One thing to watch', data.one_thing_to_watch) : ''}
-          ${data.take_out ? section('takeout', '📌 Before you finish', data.take_out) : ''}
-          ${isTier2 && data.redirect_message ? section('redirect', '💬 Worth knowing', data.redirect_message) : ''}
-          ${data.why_this_works ? accordionSection(data.why_this_works) : ''}
-        `;
+        );
       }
 
-      document.getElementById('output-section').classList.add('visible');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+      return (
+        <div className="anim-fade-in" style={{ maxWidth:520, margin:'0 auto', paddingBottom:60 }}>
 
-    function section(type, label, text) {
-      return `
-        <div class="output-section section-${type}">
-          <div class="output-label">${label}</div>
-          <div class="output-text">${escapeHtml(text)}</div>
-        </div>
-      `;
-    }
+          {/* Atmospheric dark header */}
+          <div style={{ background:'var(--primary)', padding:'28px 24px 28px', position:'relative', overflow:'hidden' }}>
+            <div style={{ position:'absolute', top:-40, right:-40, width:140, height:140,
+              borderRadius:'50%', background:'rgba(255,255,255,0.05)' }} />
 
-    function shapeSection(steps, roles) {
-      const rolesHtml = roles ? `
-        <div class="roles-box">
-          <div class="roles-title">Who plays who</div>
-          <div class="roles-grid">
-            <div class="role-card role-parent">
-              <div class="role-label">You play</div>
-              <div class="role-name">${escapeHtml(roles.parent)}</div>
-            </div>
-            <div class="role-card role-child">
-              <div class="role-label">Your child plays</div>
-              <div class="role-name">${escapeHtml(roles.child)}</div>
-            </div>
+            <Logo size="sm" dark />
+
+            {(name||age) && (
+              <div style={{ fontSize:12.5, color:'rgba(255,255,255,0.55)', letterSpacing:'0.8px',
+                textTransform:'uppercase', fontWeight:600, marginTop:16, marginBottom:14 }}>
+                {[name, age ? `${age} years old` : ''].filter(Boolean).join(' · ')}
+              </div>
+            )}
+
+            {/* The spark as a pull quote */}
+            {data.the_spark && (
+              <blockquote style={{ fontFamily:'var(--font-display)', fontSize:21, fontStyle:'italic',
+                fontWeight:400, color:'white', lineHeight:1.5, margin:'0 0 16px', letterSpacing:'-0.1px' }}>
+                "{data.the_spark}"
+              </blockquote>
+            )}
+
+            {/* This is normal — flows beneath the spark */}
+            {data.this_is_normal && (
+              <p style={{ fontSize:14, color:'rgba(255,255,255,0.68)', lineHeight:1.65, margin:0,
+                fontFamily:'var(--font-display)', fontStyle:'italic', borderTop:'1px solid rgba(255,255,255,0.15)',
+                paddingTop:14 }}>
+                {data.this_is_normal}
+              </p>
+            )}
           </div>
-          ${roles.note ? `<div class="roles-note">${escapeHtml(roles.note)}</div>` : ''}
-        </div>
-      ` : '';
 
-      const items = steps.map((step, i) => `
-        <li>
-          <span class="step-num">${i + 1}</span>
-          <span>${escapeHtml(step)}</span>
-        </li>
-      `).join('');
+          {/* Content area */}
+          <div style={{ padding:'0 22px' }}>
 
-      return `
-        <div class="output-section section-shape">
-          <div class="output-label">🗺️ How it unfolds</div>
-          ${rolesHtml}
-          <ul class="shape-steps">${items}</ul>
-        </div>
-      `;
-    }
+            {/* Roles — clean two-column type */}
+            {data.roles && (
+              <div style={{ padding:'22px 0', borderBottom:'1px solid var(--border)' }}>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr auto 1fr', alignItems:'start', gap:8 }}>
+                  <div>
+                    <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
+                      color:'var(--text-soft)', marginBottom:5 }}>You play</div>
+                    <div style={{ fontFamily:'var(--font-display)', fontSize:18, fontWeight:500,
+                      color:'var(--text)', lineHeight:1.3 }}>{data.roles.parent}</div>
+                  </div>
+                  <div style={{ color:'var(--border)', fontSize:24, paddingTop:14, userSelect:'none' }}>·</div>
+                  <div style={{ textAlign:'right' }}>
+                    <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
+                      color:'var(--text-soft)', marginBottom:5 }}>{name ? `${name} plays` : 'They play'}</div>
+                    <div style={{ fontFamily:'var(--font-display)', fontSize:18, fontWeight:500,
+                      color:'var(--text)', lineHeight:1.3 }}>{data.roles.child}</div>
+                  </div>
+                </div>
+                {data.roles.note && (
+                  <p style={{ fontSize:13, color:'var(--text-soft)', marginTop:10, fontStyle:'italic',
+                    textAlign:'center', lineHeight:1.5 }}>{data.roles.note}</p>
+                )}
+              </div>
+            )}
 
-    function accordionSection(text) {
-      return `
-        <div class="accordion" id="why-accordion">
-          <div class="accordion-header" onclick="toggleAccordion()">
-            <span>🔬 The research behind this</span>
-            <span class="accordion-icon">⌄</span>
+            {/* Steps — editorial, breathing */}
+            {data.how_it_unfolds && (
+              <div style={{ padding:'24px 0', borderBottom:'1px solid var(--border)' }}>
+                <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
+                  color:'var(--text-soft)', marginBottom:20 }}>How it unfolds</div>
+                <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
+                  {data.how_it_unfolds.map((step, i) => (
+                    <div key={i} style={{ display:'flex', gap:16 }}>
+                      <div style={{ flexShrink:0, fontFamily:'var(--font-display)', fontStyle:'italic',
+                        fontSize:32, fontWeight:600, color:'var(--border)', lineHeight:1, width:28, paddingTop:2 }}>
+                        {i+1}
+                      </div>
+                      <p style={{ fontSize:15.5, lineHeight:1.7, color:'var(--text)', margin:0, paddingTop:5 }}>{step}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Quieter zone — context, de-emphasised */}
+            <div style={{ paddingTop:20 }}>
+              {data.the_why && (
+                <div style={{ marginBottom:20 }}>
+                  <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
+                    color:'var(--text-soft)', marginBottom:6 }}>Why this works</div>
+                  <p style={{ fontSize:14.5, lineHeight:1.7, color:'var(--text-soft)', margin:0 }}>{data.the_why}</p>
+                </div>
+              )}
+
+              {data.one_thing_to_watch && (
+                <div style={{ marginBottom:20, paddingLeft:14, borderLeft:'2px solid var(--border)' }}>
+                  <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
+                    color:'var(--text-soft)', marginBottom:6 }}>Something to watch</div>
+                  <p style={{ fontSize:14.5, lineHeight:1.7, color:'var(--text-soft)', margin:0 }}>{data.one_thing_to_watch}</p>
+                </div>
+              )}
+
+              {data.take_out && (
+                <div style={{ marginBottom:20, paddingLeft:14, borderLeft:'2px solid var(--accent-light)' }}>
+                  <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
+                    color:'var(--accent)', marginBottom:6 }}>Before you finish</div>
+                  <p style={{ fontSize:14.5, lineHeight:1.7, color:'var(--text)', margin:0 }}>{data.take_out}</p>
+                </div>
+              )}
+
+              {data.triage_tier === 2 && data.redirect_message && (
+                <div style={{ marginBottom:20, padding:'14px 16px', background:'#FFF5F5',
+                  borderRadius:10, border:'1px solid #FECACA' }}>
+                  <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
+                    color:'#DC2626', marginBottom:6 }}>Worth knowing</div>
+                  <p style={{ fontSize:14.5, lineHeight:1.7, color:'#7F1D1D', margin:0 }}>{data.redirect_message}</p>
+                </div>
+              )}
+
+              {data.why_this_works && <WhyAccordion text={data.why_this_works} />}
+            </div>
+
+            <ActionRow onReset={onReset} onTryAgain={onTryAgain} loading={loading} />
           </div>
-          <div class="accordion-body">${escapeHtml(text)}</div>
         </div>
-      `;
+      );
     }
 
-    function toggleAccordion() {
-      document.getElementById('why-accordion').classList.toggle('open');
+    // ─── MAIN APP ─────────────────────────────────────────────────────────────
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "theme": "storybook",
+      "fontSize": 16,
+      "apiUrl": "/api/generate"
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+      const [screen, setScreen]       = useState('intro');
+      const [stepIndex, setStepIndex] = useState(0);
+      const [answers, setAnswers]     = useState({});
+      const [output, setOutput]       = useState(null);
+      const [error, setError]         = useState(null);
+      const [retrying, setRetrying]   = useState(false);
+      const lastMessage               = useRef(null);
+
+      useEffect(() => {
+        const vars = THEMES[tweaks.theme] || THEMES.storybook;
+        Object.entries(vars).forEach(([k,v]) => document.documentElement.style.setProperty(k,v));
+        document.body.style.fontSize = tweaks.fontSize + 'px';
+      }, [tweaks.theme, tweaks.fontSize]);
+
+      const activeQuestions = getActiveQuestions(answers);
+      const currentQuestion = activeQuestions[stepIndex];
+
+      function handleAnswer(id, value) {
+        setAnswers(prev => {
+          const next = { ...prev, [id]: value };
+          if (id==='timing') { delete next.energy; delete next.location; }
+          return next;
+        });
+        setError(null);
+      }
+
+      function handleContinue(val, qId) {
+        const newAnswers = { ...answers };
+        if (val !== undefined && qId) {
+          newAnswers[qId] = val;
+          if (qId==='timing') { delete newAnswers.energy; delete newAnswers.location; }
+          setAnswers(newAnswers);
+        }
+        const active = getActiveQuestions(newAnswers);
+        if (stepIndex + 1 >= active.length) submitForm(newAnswers);
+        else setStepIndex(s => s+1);
+      }
+
+      function handleBack() {
+        if (stepIndex > 0) setStepIndex(s => s-1);
+        else setScreen('intro');
+        setError(null);
+      }
+
+      async function submitForm(ans) {
+        const a = ans || answers;
+        if (!a.age)        { setError("Please select your child's age."); return; }
+        if (!a.goal?.trim()) { setError("Please describe what you'd like play to help with."); return; }
+        setScreen('loading');
+        const msg = buildUserMessage(a);
+        lastMessage.current = msg;
+        try {
+          const data = await generatePlayIdea(msg, tweaks.apiUrl);
+          setOutput(data);
+          setScreen('output');
+        } catch(e) {
+          setScreen('form');
+          setError('Something went wrong. Please try again.');
+        }
+      }
+
+      async function handleTryAgain() {
+        if (!lastMessage.current) return;
+        setRetrying(true);
+        try {
+          const data = await generatePlayIdea(
+            lastMessage.current + '\n\nPlease suggest a completely different approach from your previous suggestion.',
+            tweaks.apiUrl
+          );
+          setOutput(data);
+        } catch(e) {}
+        setRetrying(false);
+      }
+
+      function handleReset() {
+        setScreen('intro'); setStepIndex(0); setAnswers({});
+        setOutput(null); setError(null); lastMessage.current = null;
+        window.scrollTo(0,0);
+      }
+
+      return (
+        <>
+          <TweaksPanel>
+            <TweakSection label="Visual Theme">
+              <TweakRadio label="Theme" value={tweaks.theme}
+                options={[{value:'storybook',label:'Storybook'},{value:'studio',label:'Studio'},{value:'field',label:'Field'}]}
+                onChange={v => setTweak('theme', v)} />
+            </TweakSection>
+            <TweakSection label="Typography">
+              <TweakSlider label="Base font size" value={tweaks.fontSize}
+                min={14} max={20} step={1} unit="px" onChange={v => setTweak('fontSize', v)} />
+            </TweakSection>
+            <TweakSection label="API">
+              <TweakText label="API URL" value={tweaks.apiUrl}
+                placeholder="/api/generate"
+                onChange={v => setTweak('apiUrl', v)} />
+            </TweakSection>
+          </TweaksPanel>
+
+          {screen==='intro'   && <IntroScreen onStart={() => setScreen('form')} />}
+          {screen==='form' && currentQuestion && (
+            <QuestionCard key={stepIndex} q={currentQuestion} stepIndex={stepIndex}
+              total={activeQuestions.length} answers={answers}
+              onAnswer={handleAnswer} onContinue={handleContinue} onBack={handleBack} error={error} />
+          )}
+          {screen==='loading' && <LoadingScreen name={answers.name} />}
+          {screen==='output'  && output && (
+            <OutputCard data={output} answers={answers}
+              onReset={handleReset} onTryAgain={handleTryAgain} loading={retrying} />
+          )}
+        </>
+      );
     }
 
-    function renderRawOutput(raw) {
-      const el = document.getElementById('output-content');
-      el.innerHTML = `
-        <div class="output-section section-why">
-          <div class="output-label">Play idea</div>
-          <div class="output-text" style="white-space:pre-wrap">${escapeHtml(raw)}</div>
-        </div>
-      `;
-      document.getElementById('output-section').classList.add('visible');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
 </body>
 </html>
