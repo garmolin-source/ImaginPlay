@@ -424,24 +424,53 @@
     // ─── SPEECH INPUT ─────────────────────────────────────────────────────────
     function useSpeechInput(onResult) {
       const [listening, setListening] = useState(false);
+      const listeningRef = useRef(false); // ref so closures always see current value
       const recRef = useRef(null);
       const supported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
-      function toggle() {
-        if (listening) { recRef.current?.stop(); setListening(false); return; }
+      function stop() {
+        listeningRef.current = false;
+        setListening(false);
+        try { recRef.current?.stop(); } catch(e) {}
+        recRef.current = null;
+      }
+
+      function startRec() {
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SR) return;
         const rec = new SR();
         rec.lang = 'en-US';
-        rec.interimResults = false;
-        rec.continuous = false;
-        rec.onresult = e => { onResult(e.results[0][0].transcript); setListening(false); };
-        rec.onerror = () => setListening(false);
-        rec.onend   = () => setListening(false);
+        rec.continuous = true;      // keep going until user taps stop
+        rec.interimResults = false; // only fire on complete utterances
+        rec.onresult = e => {
+          // collect only the new final results from this event
+          let newText = '';
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) newText += e.results[i][0].transcript + ' ';
+          }
+          if (newText.trim()) onResult(newText.trim());
+        };
+        rec.onerror = e => {
+          if (e.error === 'no-speech') return; // pause between words — ignore, keep listening
+          stop(); // real error — give up
+        };
+        rec.onend = () => {
+          // Chromium/Arc stops recognition unexpectedly — restart if user hasn't stopped
+          if (listeningRef.current) {
+            try { startRec(); } catch(e) { stop(); }
+          }
+        };
         recRef.current = rec;
-        rec.start();
-        setListening(true);
+        try { rec.start(); } catch(e) { stop(); }
       }
+
+      function toggle() {
+        if (listeningRef.current) { stop(); return; }
+        listeningRef.current = true;
+        setListening(true);
+        startRec();
+      }
+
       return { listening, toggle, supported };
     }
 
@@ -697,18 +726,17 @@
       return (
         <div className="anim-fade-up" style={{ display:'flex', flexDirection:'column',
           minHeight:'100dvh', padding:'0 24px 40px' }}>
+          {/* Top bar — progress + step counter only */}
           <div style={{ padding:'16px 0 24px' }}>
             <ProgressBar step={stepIndex} total={total} />
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:12 }}>
-              {stepIndex > 0
-                ? <button onClick={onBack} style={{ background:'none', border:'none', cursor:'pointer',
-                    color:'var(--text-soft)', fontSize:14, fontFamily:'var(--font-ui)', padding:0 }}>← Back</button>
-                : <div />}
+            <div style={{ display:'flex', justifyContent:'flex-end', alignItems:'center', marginTop:12 }}>
               <span style={{ fontSize:13, color:'var(--text-soft)', fontFamily:'var(--font-ui)' }}>
                 {stepIndex+1} / {total}
               </span>
             </div>
           </div>
+
+          {/* Question + input */}
           <div style={{ flex:1 }}>
             <h2 style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:500,
               lineHeight:1.35, color:'var(--text)', letterSpacing:'-0.3px', marginBottom: q.hint?8:24 }}>
@@ -718,26 +746,36 @@
             {inputEl}
             {error && <p style={{ marginTop:12, fontSize:14, color:'#C04040' }}>{error}</p>}
           </div>
-          {showButtons && (
-            <div style={{ display:'flex', gap:10, marginTop:32 }}>
-              {q.optional && (q.type==='text' || q.type==='textarea') && (
-                <button onClick={() => onContinue(value, q.id)} style={{
-                  flex:1, padding:'14px', borderRadius:12, border:'2px solid var(--border)',
-                  background:'transparent', fontSize:15, fontWeight:500, color:'var(--text-soft)',
-                  cursor:'pointer', fontFamily:'var(--font-ui)',
-                }}>Skip →</button>
-              )}
-              <button onClick={() => onContinue(value, q.id)} disabled={!canContinue} style={{
-                flex:2, padding:'15px', borderRadius:12, border:'none',
-                background: canContinue ? 'var(--primary)' : 'var(--border)',
-                color:       canContinue ? 'white' : 'var(--text-soft)',
-                fontSize:16, fontWeight:600, fontFamily:'var(--font-ui)',
-                cursor: canContinue ? 'pointer' : 'not-allowed', transition:'all 0.2s',
-              }}>
-                {isLast ? 'Find a play idea →' : 'Continue →'}
-              </button>
-            </div>
-          )}
+
+          {/* Bottom bar — Back always on left, Continue/Skip on right */}
+          <div style={{ display:'flex', gap:10, marginTop:32 }}>
+            <button onClick={onBack} style={{
+              flex:1, padding:'15px', borderRadius:12, border:'2px solid var(--border)',
+              background:'transparent', fontSize:15, fontWeight:500, color:'var(--text-soft)',
+              cursor:'pointer', fontFamily:'var(--font-ui)',
+            }}>← Back</button>
+
+            {showButtons && (
+              <>
+                {q.optional && (q.type==='text' || q.type==='textarea') && (
+                  <button onClick={() => onContinue(value, q.id)} style={{
+                    flex:1, padding:'15px', borderRadius:12, border:'2px solid var(--border)',
+                    background:'transparent', fontSize:15, fontWeight:500, color:'var(--text-soft)',
+                    cursor:'pointer', fontFamily:'var(--font-ui)',
+                  }}>Skip</button>
+                )}
+                <button onClick={() => onContinue(value, q.id)} disabled={!canContinue} style={{
+                  flex:2, padding:'15px', borderRadius:12, border:'none',
+                  background: canContinue ? 'var(--primary)' : 'var(--border)',
+                  color:       canContinue ? 'white' : 'var(--text-soft)',
+                  fontSize:16, fontWeight:600, fontFamily:'var(--font-ui)',
+                  cursor: canContinue ? 'pointer' : 'not-allowed', transition:'all 0.2s',
+                }}>
+                  {isLast ? 'Find a play idea →' : 'Continue →'}
+                </button>
+              </>
+            )}
+          </div>
         </div>
       );
     }
