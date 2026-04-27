@@ -200,8 +200,14 @@ module.exports = async (req, res) => {
 
     const responseText = message.content[0].text.trim();
 
+    // Strip markdown code fences if Claude wrapped the JSON (e.g. ```json ... ```)
+    const cleaned = responseText
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```$/, '')
+      .trim();
+
     try {
-      const parsed = JSON.parse(responseText);
+      const parsed = JSON.parse(cleaned);
       return res.status(200).json({ success: true, data: parsed });
     } catch {
       return res.status(200).json({ success: false, raw: responseText });
