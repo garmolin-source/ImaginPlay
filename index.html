@@ -15,7 +15,6 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Storybook (default) */
       --bg: #F8F5EF;
       --bg-card: #FDFAF4;
       --primary: #2A4849;
@@ -48,7 +47,6 @@
 
     #root { min-height: 100%; display: flex; flex-direction: column; }
 
-    /* Paper grain overlay */
     body::after {
       content: '';
       position: fixed;
@@ -79,10 +77,15 @@
       0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
       40%           { transform: scale(1); opacity: 1; }
     }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(32px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
 
     .anim-fade-up   { animation: fadeUp 0.38s cubic-bezier(.22,.68,0,1.2) both; }
     .anim-fade-down { animation: fadeDown 0.3s ease both; }
     .anim-fade-in   { animation: fadeIn 0.35s ease both; }
+    .anim-slide-in  { animation: slideInRight 0.32s cubic-bezier(.22,.68,0,1.2) both; }
 
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -92,7 +95,7 @@
 <body>
   <div id="root"></div>
 
-  <!-- Tweaks panel (design tool helper — also exposes theme switching) -->
+  <!-- Tweaks panel -->
   <script type="text/babel">
     const __TWEAKS_STYLE = `
       .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
@@ -134,12 +137,6 @@
       .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
         background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
         border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2}
-      .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
-        background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
-      .twk-toggle[data-on="1"]{background:#34c759}
-      .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
-        background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
-      .twk-toggle[data-on="1"] i{transform:translateX(14px)}
     `;
 
     function useTweaks(defaults) {
@@ -332,8 +329,26 @@
       },
     };
 
+    // ─── STORAGE ──────────────────────────────────────────────────────────────
+    const PROFILE_KEY = 'imaginplay_profile';
+    const BANK_KEY    = 'imaginplay_bank';
+
+    function loadProfile() {
+      try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || null; } catch { return null; }
+    }
+    function saveProfile(p) {
+      try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch {}
+    }
+    function loadBank() {
+      try { return JSON.parse(localStorage.getItem(BANK_KEY)) || []; } catch { return []; }
+    }
+    function saveBank(b) {
+      try { localStorage.setItem(BANK_KEY, JSON.stringify(b)); } catch {}
+    }
+
     // ─── QUESTIONS ────────────────────────────────────────────────────────────
-    const QUESTIONS = [
+    // Profile questions (saved to localStorage after first fill)
+    const PROFILE_QUESTIONS = [
       { id: 'name',        type: 'text',     optional: true,  autoNext: false,
         question: "What's your child's name?",
         hint: "Optional — makes things feel more personal",
@@ -353,64 +368,40 @@
         question: "What are they into right now?",
         hint: "Shows, games, characters, themes — anything",
         placeholder: "e.g. Bluey, Minecraft, football, space" },
-      { id: 'goal',        type: 'textarea', optional: false, autoNext: false,
-        question: "What do you want play to help with today?",
-        hint: "The more specific you are, the better the idea",
-        placeholder: "e.g. She's been scared of someone breaking into the house. She cries at night. I want to help her process that fear through play." },
-      { id: 'timing',      type: 'timing',   optional: false, autoNext: true,
-        question: "When are you thinking of playing?",
-        options: [
-          { value: 'right now',      label: 'Right now',      sub: "We're about to play",     icon: '⚡' },
-          { value: 'later today',    label: 'Later today',    sub: "Planning ahead",           icon: '☀' },
-          { value: 'just exploring', label: 'Just exploring', sub: "No specific time in mind", icon: '✦' },
-        ] },
-      { id: 'energy',    type: 'option', optional: true, autoNext: true,
-        condition: a => a.timing === 'right now',
-        question: "How are they right now?",
-        hint: "Helps match the play to their current state",
-        options: [
-          { value: 'wound up', label: 'Wound up' },
-          { value: 'calm',     label: 'Calm'     },
-          { value: 'tired',    label: 'Tired'    },
-        ] },
-      { id: 'location',  type: 'option', optional: true, autoNext: true,
-        condition: a => a.timing === 'later today',
-        question: "Where will you be?",
-        options: [
-          { value: 'at home',      label: 'At home'      },
-          { value: 'outside',      label: 'Outside'      },
-          { value: 'in the car',   label: 'In the car'   },
-          { value: 'not sure yet', label: 'Not sure yet' },
-        ] },
     ];
 
-    function getActiveQuestions(answers) {
-      return QUESTIONS.filter(q => !q.condition || q.condition(answers));
-    }
+    // Session question (not saved — changes each session)
+    const SESSION_QUESTION = {
+      id: 'challenges', type: 'textarea', optional: false, autoNext: false,
+      question: "What do you want play to help with?",
+      hint: "You can list a few things — play often works on multiple at once",
+      placeholder: "e.g. She's been anxious about starting school and also struggles with losing games. I'd love ideas that touch both.",
+    };
 
-    // ─── HELPERS ─────────────────────────────────────────────────────────────
     function buildUserMessage(answers) {
-      const { name, age, temperament, loves_play, loves_now, goal, timing, energy, location } = answers;
+      const { name, age, temperament, loves_play, loves_now, challenges } = answers;
       let msg = '--- ABOUT MY CHILD ---\n';
       if (name) msg += `Name: ${name}\n`;
       msg += `Age: ${age}\n`;
       if (temperament?.length) msg += `Temperament: ${temperament.join(', ')}\n`;
       if (loves_play) msg += `Loves to play with: ${loves_play}\n`;
       if (loves_now)  msg += `Into right now: ${loves_now}\n`;
-      msg += "\n--- TODAY'S SESSION ---\n";
-      msg += `What I want play to help with: ${goal}\n`;
-      msg += `When we are playing: ${timing}\n`;
-      if (timing === 'right now'   && energy)   msg += `How they are right now: ${energy}\n`;
-      if (timing === 'later today' && location) msg += `Where we will be: ${location}\n`;
+      msg += "\n--- WHAT I WANT PLAY TO HELP WITH ---\n";
+      msg += challenges + '\n';
       return msg;
     }
 
-    async function generatePlayIdea(userMessage, apiUrl) {
+    async function generateIdeas(userMessage, apiUrl, previousIdeas) {
       const url = (apiUrl && apiUrl.trim()) ? apiUrl.trim() : '/api/generate';
+      let msg = userMessage;
+      if (previousIdeas && previousIdeas.length > 0) {
+        msg += '\n\nYou have already suggested these ideas — please generate 3 completely different ones:\n';
+        previousIdeas.forEach((idea, i) => { msg += `${i+1}. ${idea.text.substring(0, 80)}...\n`; });
+      }
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userMessage }),
+        body: JSON.stringify({ userMessage: msg }),
       });
       const result = await res.json();
       if (result.success && result.data) return result.data;
@@ -426,9 +417,9 @@
       const [listening, setListening] = useState(false);
       const listeningRef = useRef(false);
       const recRef       = useRef(null);
-      const accRef       = useRef('');       // grows throughout the recording session
+      const accRef       = useRef('');
       const callbackRef  = useRef(onAccumulated);
-      callbackRef.current = onAccumulated;   // always points to the latest callback
+      callbackRef.current = onAccumulated;
       const supported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
       function stop() {
@@ -452,16 +443,15 @@
             if (e.results[i].isFinal) chunk += e.results[i][0].transcript + ' ';
           }
           if (chunk.trim()) {
-            accRef.current += chunk;                         // append to session total
-            callbackRef.current(accRef.current.trim());      // send full accumulated text
+            accRef.current += chunk;
+            callbackRef.current(accRef.current.trim());
           }
         };
         rec.onerror = e => {
-          if (e.error === 'no-speech') return;  // normal pause — keep going
+          if (e.error === 'no-speech') return;
           stop();
         };
         rec.onend = () => {
-          // Chromium/Arc kills recognition on pauses — restart transparently
           if (listeningRef.current) {
             try { startRec(); } catch(e) { stop(); }
           }
@@ -481,9 +471,6 @@
       return { listening, toggle, supported };
     }
 
-    // MicButton receives the current field value + onChange.
-    // It snapshots the field value when recording starts, then writes
-    // base + accumulated dictation — no stale-closure appending.
     function MicButton({ value, onChange, style: extraStyle = {} }) {
       const baseRef = useRef('');
 
@@ -495,7 +482,7 @@
       const { listening, toggle, supported } = useSpeechInput(onAccumulated);
 
       function handleClick() {
-        if (!listening) baseRef.current = value || '';  // snapshot before recording starts
+        if (!listening) baseRef.current = value || '';
         toggle();
       }
 
@@ -530,7 +517,7 @@
     }
 
     // ─── INTRO SCREEN ─────────────────────────────────────────────────────────
-    function IntroScreen({ onStart }) {
+    function IntroScreen({ onStart, savedProfile }) {
       return (
         <div className="anim-fade-in" style={{ minHeight:'100dvh', display:'flex', flexDirection:'column',
           alignItems:'center', justifyContent:'center', padding:'40px 28px', position:'relative', overflow:'hidden' }}>
@@ -557,7 +544,9 @@
               Turn everyday moments into play that helps your child grow.
             </h1>
             <p style={{ fontSize:15, color:'var(--text-soft)', lineHeight:1.65, marginBottom:10 }}>
-              Answer a few questions. Get a play idea rooted in child development that you can start right now.
+              {savedProfile
+                ? `Welcome back${savedProfile.name ? `, ${savedProfile.name}'s parent` : ''}. Get fresh ideas or explore your saved ones.`
+                : 'Answer a few questions. Get play ideas rooted in child development that you can use any time.'}
             </p>
             <div style={{ margin:'24px 0 32px', padding:'14px 18px', background:'var(--primary-light)',
               borderRadius:12, borderLeft:'3px solid var(--primary)' }}>
@@ -576,7 +565,7 @@
               onMouseEnter={e => e.currentTarget.style.transform='translateY(-2px)'}
               onMouseLeave={e => e.currentTarget.style.transform='translateY(0)'}
             >
-              Find a play idea →
+              {savedProfile ? 'Get new ideas →' : 'Find play ideas →'}
             </button>
             <p style={{ marginTop:20, fontSize:12.5, color:'var(--text-soft)', letterSpacing:'0.3px' }}>
               17 play archetypes · Ages 2–8 · Based on child development research
@@ -639,62 +628,15 @@
       );
     }
 
-    function TimingInput({ q, value, onChange }) {
-      return (
-        <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-          {q.options.map(opt => {
-            const sel = value===opt.value;
-            return (
-              <button key={opt.value} onClick={() => onChange(opt.value)} style={{
-                padding:'15px 18px', borderRadius:14, border:'2px solid',
-                borderColor: sel ? 'var(--primary)' : 'var(--border)',
-                background:  sel ? 'var(--primary-light)' : 'var(--bg)',
-                cursor:'pointer', display:'flex', alignItems:'center', gap:14,
-                textAlign:'left', transition:'all 0.15s', fontFamily:'var(--font-ui)',
-              }}>
-                <span style={{ fontSize:22, flexShrink:0, lineHeight:1 }}>{opt.icon}</span>
-                <div>
-                  <div style={{ fontSize:15.5, fontWeight:600, color: sel?'var(--primary)':'var(--text)' }}>{opt.label}</div>
-                  <div style={{ fontSize:13, color:'var(--text-soft)', marginTop:1 }}>{opt.sub}</div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      );
-    }
-
-    function OptionInput({ q, value, onChange }) {
-      return (
-        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
-          {q.options.map(opt => {
-            const sel = value===opt.value;
-            return (
-              <button key={opt.value} onClick={() => onChange(opt.value)} style={{
-                padding:'11px 18px', borderRadius:12, border:'2px solid',
-                borderColor: sel ? 'var(--primary)' : 'var(--border)',
-                background:  sel ? 'var(--primary-light)' : 'var(--bg)',
-                color:       sel ? 'var(--primary)' : 'var(--text-soft)',
-                fontSize:14.5, fontWeight: sel?600:400, fontFamily:'var(--font-ui)', cursor:'pointer', transition:'all 0.15s',
-              }}>{opt.label}</button>
-            );
-          })}
-        </div>
-      );
-    }
-
     function TextInput({ q, value, onChange }) {
       const ref = useRef(null);
       useEffect(() => { setTimeout(() => ref.current?.focus(), 120); }, []);
-
-      // Grow the input as content grows
       useEffect(() => {
         const ta = ref.current;
         if (!ta) return;
         ta.style.height = 'auto';
         ta.style.height = ta.scrollHeight + 'px';
       }, [value]);
-
       return (
         <div style={{ display:'flex', gap:10, alignItems:'flex-start' }}>
           <textarea ref={ref} value={value||''} onChange={e => onChange(e.target.value)}
@@ -714,17 +656,13 @@
 
     function TextareaInput({ q, value, onChange }) {
       const ref = useRef(null);
-
       useEffect(() => { setTimeout(() => ref.current?.focus(), 120); }, []);
-
-      // Auto-resize textarea to show all content without scrolling
       useEffect(() => {
         const ta = ref.current;
         if (!ta) return;
         ta.style.height = 'auto';
         ta.style.height = ta.scrollHeight + 'px';
       }, [value]);
-
       return (
         <div>
           <textarea ref={ref} value={value||''} onChange={e => onChange(e.target.value)}
@@ -756,7 +694,6 @@
       const canContinue = q.optional || (value && (Array.isArray(value) ? value.length>0 : String(value).trim().length>0));
       const isLast = stepIndex === total - 1;
 
-      // Enter key = Continue (except textarea where Enter means newline)
       useEffect(() => {
         function onKey(e) {
           if (e.key !== 'Enter') return;
@@ -772,18 +709,15 @@
       const inputEl = (() => {
         if (q.type==='age')      return <AgeInput q={q} value={value} onChange={handleSingleSelect} />;
         if (q.type==='chips')    return <ChipsInput q={q} value={value} onChange={handleChange} />;
-        if (q.type==='timing')   return <TimingInput q={q} value={value} onChange={handleSingleSelect} />;
-        if (q.type==='option')   return <OptionInput q={q} value={value} onChange={handleSingleSelect} />;
         if (q.type==='textarea') return <TextareaInput q={q} value={value} onChange={handleChange} />;
         return <TextInput q={q} value={value} onChange={handleChange} />;
       })();
 
-      const showButtons = !q.autoNext || q.type==='chips';
+      const showButtons = q.type !== 'age';
 
       return (
         <div className="anim-fade-up" style={{ display:'flex', flexDirection:'column',
           minHeight:'100dvh', padding:'0 24px 40px' }}>
-          {/* Top bar — progress + step counter only */}
           <div style={{ padding:'16px 0 24px' }}>
             <ProgressBar step={stepIndex} total={total} />
             <div style={{ display:'flex', justifyContent:'flex-end', alignItems:'center', marginTop:12 }}>
@@ -793,7 +727,6 @@
             </div>
           </div>
 
-          {/* Question + input */}
           <div style={{ flex:1 }}>
             <h2 style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:500,
               lineHeight:1.35, color:'var(--text)', letterSpacing:'-0.3px', marginBottom: q.hint?8:24 }}>
@@ -804,7 +737,6 @@
             {error && <p style={{ marginTop:12, fontSize:14, color:'#C04040' }}>{error}</p>}
           </div>
 
-          {/* Bottom bar — Back always on left, Continue/Skip on right */}
           <div style={{ display:'flex', gap:10, marginTop:32 }}>
             <button onClick={onBack} style={{
               flex:1, padding:'15px', borderRadius:12, border:'2px solid var(--border)',
@@ -828,7 +760,7 @@
                   fontSize:16, fontWeight:600, fontFamily:'var(--font-ui)',
                   cursor: canContinue ? 'pointer' : 'not-allowed', transition:'all 0.2s',
                 }}>
-                  {isLast ? 'Find a play idea →' : 'Continue →'}
+                  {isLast ? 'Get ideas →' : 'Continue →'}
                 </button>
               </>
             )}
@@ -842,7 +774,7 @@
       "Reading between the lines…",
       "Finding the right approach…",
       "Consulting the research…",
-      "Crafting something just for you…",
+      "Crafting ideas just for you…",
       "Almost ready…",
     ];
 
@@ -862,7 +794,7 @@
           </div>
           <div style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:500,
             color:'var(--text)', marginBottom:8, letterSpacing:'-0.2px' }}>
-            {name ? `Finding an idea for ${name}…` : 'Finding your play idea…'}
+            {name ? `Finding ideas for ${name}…` : 'Finding your play ideas…'}
           </div>
           <div key={msgIdx} className="anim-fade-in" style={{ fontSize:14.5, color:'var(--text-soft)' }}>
             {LOADING_MSGS[msgIdx]}
@@ -877,197 +809,299 @@
       );
     }
 
-    // ─── OUTPUT CARD ──────────────────────────────────────────────────────────
-    function WhyAccordion({ text }) {
-      const [open, setOpen] = useState(false);
+    // ─── IDEA CARD ────────────────────────────────────────────────────────────
+    function IdeaCard({ idea, index, onSave, onDismiss, isSaved }) {
       return (
-        <div style={{ marginTop:4 }}>
-          <button onClick={() => setOpen(o=>!o)} style={{
-            background:'none', border:'none', cursor:'pointer', padding:'8px 0',
-            display:'flex', alignItems:'center', gap:8, fontFamily:'var(--font-ui)',
+        <div className="anim-slide-in" style={{
+          animationDelay: `${index * 0.08}s`,
+          background: 'var(--bg-card)',
+          borderRadius: 16,
+          border: '1px solid var(--border)',
+          overflow: 'hidden',
+          boxShadow: '0 2px 16px rgba(0,0,0,0.05)',
+          marginBottom: 16,
+        }}>
+          {/* Card body */}
+          <div style={{ padding: '22px 22px 16px' }}>
+            <p style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 16.5,
+              lineHeight: 1.75,
+              color: 'var(--text)',
+              margin: 0,
+            }}>
+              {idea.text}
+            </p>
+          </div>
+          {/* Action row */}
+          <div style={{
+            display: 'flex',
+            gap: 10,
+            padding: '12px 22px 18px',
           }}>
-            <span style={{ fontSize:12, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.8px',
-              color:'var(--text-soft)' }}>The research behind this</span>
-            <span style={{ fontSize:14, color:'var(--text-soft)', transition:'transform 0.2s',
-              display:'inline-block', transform: open ? 'rotate(180deg)' : 'none' }}>⌄</span>
-          </button>
-          {open && (
-            <div className="anim-fade-down" style={{ fontSize:14, color:'var(--text-soft)',
-              lineHeight:1.7, paddingTop:4, paddingBottom:8 }}>
-              {text}
+            <button onClick={onDismiss} style={{
+              flex: 1, padding: '11px', borderRadius: 10,
+              border: '1.5px solid var(--border)',
+              background: 'transparent', fontSize: 14, fontWeight: 500,
+              color: 'var(--text-soft)', cursor: 'pointer', fontFamily: 'var(--font-ui)',
+              transition: 'all 0.15s',
+            }}>
+              Not this one
+            </button>
+            <button onClick={onSave} style={{
+              flex: 2, padding: '11px', borderRadius: 10,
+              border: 'none',
+              background: isSaved ? 'var(--sage)' : 'var(--primary)',
+              color: isSaved ? 'var(--primary)' : 'white',
+              fontSize: 14, fontWeight: 600, cursor: 'pointer',
+              fontFamily: 'var(--font-ui)', transition: 'all 0.15s',
+            }}>
+              {isSaved ? '✓ Saved' : 'Save this idea'}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ─── BANK CARD ────────────────────────────────────────────────────────────
+    function BankCard({ idea, index, onRemove }) {
+      return (
+        <div className="anim-fade-up" style={{
+          animationDelay: `${index * 0.06}s`,
+          background: 'var(--bg-card)',
+          borderRadius: 14,
+          border: '1px solid var(--sage-border)',
+          padding: '18px 20px',
+          marginBottom: 14,
+          position: 'relative',
+        }}>
+          {/* Profile pill */}
+          {idea.profile && (
+            <div style={{
+              fontSize: 11, fontWeight: 600, letterSpacing: '0.6px',
+              textTransform: 'uppercase', color: 'var(--text-soft)',
+              marginBottom: 10,
+            }}>
+              {[idea.profile.name, idea.profile.age ? `age ${idea.profile.age}` : null].filter(Boolean).join(' · ')}
             </div>
           )}
-        </div>
-      );
-    }
-
-    function ActionRow({ onReset, onTryAgain, loading }) {
-      return (
-        <div style={{ display:'flex', gap:10, marginTop:28, marginBottom:8, paddingTop:16, borderTop:'1px solid var(--border)' }}>
-          <button onClick={onReset} style={{
-            flex:1, padding:'13px', borderRadius:12, border:'2px solid var(--border)',
-            background:'transparent', fontSize:14, fontWeight:600, color:'var(--text-soft)',
-            cursor:'pointer', fontFamily:'var(--font-ui)',
-          }}>← Start over</button>
-          <button onClick={onTryAgain} disabled={loading} style={{
-            flex:2, padding:'13px', borderRadius:12, border:'2px solid var(--accent)',
-            background:'transparent', fontSize:14, fontWeight:600, color:'var(--accent)',
-            cursor: loading?'not-allowed':'pointer', fontFamily:'var(--font-ui)', opacity: loading?0.6:1,
+          <p style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 15.5, lineHeight: 1.75,
+            color: 'var(--text)', margin: 0,
           }}>
-            {loading ? 'Finding another…' : 'Try a different idea'}
-          </button>
+            {idea.text}
+          </p>
+          <button onClick={onRemove} style={{
+            position: 'absolute', top: 14, right: 14,
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontSize: 16, color: 'var(--border)',
+            padding: '2px 6px', borderRadius: 6,
+            transition: 'color 0.15s',
+          }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--border)'}
+            title="Remove from bank"
+          >✕</button>
         </div>
       );
     }
 
-    function OutputCard({ data, answers, onReset, onTryAgain, loading }) {
+    // ─── IDEAS SCREEN ─────────────────────────────────────────────────────────
+    function IdeasScreen({ responseData, activeIdeas, savedIds, answers, onSave, onDismiss,
+                           onMoreIdeas, loadingMore, onReset, onViewBank, bankCount }) {
+      useEffect(() => { window.scrollTo(0, 0); }, []);
       const name = answers.name || '';
       const age  = answers.age  || '';
-      useEffect(() => { window.scrollTo(0, 0); }, []);
 
-      if (data.triage_tier === 3) {
+      // Tier 3: no ideas, just the redirect
+      if (responseData.triage_tier === 3) {
         return (
           <div className="anim-fade-up" style={{ maxWidth:520, margin:'0 auto', padding:'24px 24px 60px' }}>
             <div style={{ textAlign:'center', marginBottom:28, paddingTop:8 }}><Logo /></div>
             <div style={{ background:'var(--gold-light)', borderRadius:14, padding:'20px 22px', marginBottom:16 }}>
               <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px', color:'var(--gold)', marginBottom:8 }}>A note before we suggest play</div>
-              <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text)' }}>{data.this_is_normal}</p>
+              <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text)' }}>{responseData.this_is_normal}</p>
             </div>
-            {data.redirect_message && (
-              <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text-soft)', marginBottom:16 }}>{data.redirect_message}</p>
+            {responseData.redirect_message && (
+              <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text-soft)', marginBottom:16 }}>{responseData.redirect_message}</p>
             )}
-            {data.connection_activity && (
+            {responseData.connection_activity && (
               <div style={{ borderTop:'1px solid var(--border)', paddingTop:16 }}>
                 <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px', color:'var(--text-soft)', marginBottom:8 }}>Something simple for now</div>
-                <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text)' }}>{data.connection_activity}</p>
+                <p style={{ fontSize:15, lineHeight:1.7, color:'var(--text)' }}>{responseData.connection_activity}</p>
               </div>
             )}
-            <ActionRow onReset={onReset} onTryAgain={onTryAgain} loading={loading} />
+            <div style={{ display:'flex', gap:10, marginTop:28 }}>
+              <button onClick={onReset} style={{
+                flex:1, padding:'13px', borderRadius:12, border:'2px solid var(--border)',
+                background:'transparent', fontSize:14, fontWeight:600, color:'var(--text-soft)',
+                cursor:'pointer', fontFamily:'var(--font-ui)',
+              }}>← Start over</button>
+            </div>
           </div>
         );
       }
 
       return (
-        <div className="anim-fade-in" style={{ maxWidth:520, margin:'0 auto', paddingBottom:60 }}>
-
-          {/* Atmospheric dark header */}
-          <div style={{ background:'var(--primary)', padding:'28px 24px 28px', position:'relative', overflow:'hidden' }}>
+        <div style={{ maxWidth:520, margin:'0 auto', paddingBottom:60 }}>
+          {/* Header */}
+          <div style={{ background:'var(--primary)', padding:'24px 24px 22px', position:'relative', overflow:'hidden' }}>
             <div style={{ position:'absolute', top:-40, right:-40, width:140, height:140,
               borderRadius:'50%', background:'rgba(255,255,255,0.05)' }} />
-
-            <Logo size="sm" dark />
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
+              <Logo size="sm" dark />
+              {bankCount > 0 && (
+                <button onClick={onViewBank} style={{
+                  background:'rgba(255,255,255,0.12)', border:'none', borderRadius:20,
+                  padding:'6px 14px', color:'white', fontSize:13, fontWeight:600,
+                  cursor:'pointer', fontFamily:'var(--font-ui)', display:'flex', alignItems:'center', gap:6,
+                }}>
+                  <span>✦</span>
+                  <span>{bankCount} saved</span>
+                </button>
+              )}
+            </div>
 
             {(name||age) && (
               <div style={{ fontSize:12.5, color:'rgba(255,255,255,0.55)', letterSpacing:'0.8px',
-                textTransform:'uppercase', fontWeight:600, marginTop:16, marginBottom:14 }}>
+                textTransform:'uppercase', fontWeight:600, marginBottom:10 }}>
                 {[name, age ? `${age} years old` : ''].filter(Boolean).join(' · ')}
               </div>
             )}
 
-            {/* The spark as a pull quote */}
-            {data.the_spark && (
-              <blockquote style={{ fontFamily:'var(--font-display)', fontSize:21, fontStyle:'italic',
-                fontWeight:400, color:'white', lineHeight:1.5, margin:'0 0 16px', letterSpacing:'-0.1px' }}>
-                "{data.the_spark}"
-              </blockquote>
+            {responseData.this_is_normal && (
+              <p style={{ fontSize:14.5, color:'rgba(255,255,255,0.82)', lineHeight:1.65, margin:0,
+                fontFamily:'var(--font-display)', fontStyle:'italic' }}>
+                {responseData.this_is_normal}
+              </p>
             )}
 
-            {/* This is normal — flows beneath the spark */}
-            {data.this_is_normal && (
-              <p style={{ fontSize:14, color:'rgba(255,255,255,0.68)', lineHeight:1.65, margin:0,
-                fontFamily:'var(--font-display)', fontStyle:'italic', borderTop:'1px solid rgba(255,255,255,0.15)',
-                paddingTop:14 }}>
-                {data.this_is_normal}
-              </p>
+            {responseData.triage_tier === 2 && responseData.redirect_message && (
+              <div style={{ marginTop:14, padding:'12px 14px', background:'rgba(255,255,255,0.1)',
+                borderRadius:10, borderLeft:'3px solid rgba(255,200,100,0.6)' }}>
+                <p style={{ fontSize:13.5, color:'rgba(255,255,255,0.85)', lineHeight:1.6, margin:0 }}>
+                  {responseData.redirect_message}
+                </p>
+              </div>
             )}
           </div>
 
-          {/* Content area */}
-          <div style={{ padding:'0 22px' }}>
-
-            {/* Roles — clean two-column type */}
-            {data.roles && (
-              <div style={{ padding:'22px 0', borderBottom:'1px solid var(--border)' }}>
-                <div style={{ display:'grid', gridTemplateColumns:'1fr auto 1fr', alignItems:'start', gap:8 }}>
-                  <div>
-                    <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
-                      color:'var(--text-soft)', marginBottom:5 }}>You play</div>
-                    <div style={{ fontFamily:'var(--font-display)', fontSize:18, fontWeight:500,
-                      color:'var(--text)', lineHeight:1.3 }}>{data.roles.parent}</div>
-                  </div>
-                  <div style={{ color:'var(--border)', fontSize:24, paddingTop:14, userSelect:'none' }}>·</div>
-                  <div style={{ textAlign:'right' }}>
-                    <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
-                      color:'var(--text-soft)', marginBottom:5 }}>{name ? `${name} plays` : 'They play'}</div>
-                    <div style={{ fontFamily:'var(--font-display)', fontSize:18, fontWeight:500,
-                      color:'var(--text)', lineHeight:1.3 }}>{data.roles.child}</div>
-                  </div>
-                </div>
-                {data.roles.note && (
-                  <p style={{ fontSize:13, color:'var(--text-soft)', marginTop:10, fontStyle:'italic',
-                    textAlign:'center', lineHeight:1.5 }}>{data.roles.note}</p>
-                )}
+          {/* Ideas */}
+          <div style={{ padding:'20px 20px 0' }}>
+            {activeIdeas.length === 0 ? (
+              <div style={{ textAlign:'center', padding:'40px 20px', color:'var(--text-soft)' }}>
+                <p style={{ fontSize:15, marginBottom:16 }}>You've gone through all the ideas.</p>
+                <button onClick={onMoreIdeas} disabled={loadingMore} style={{
+                  padding:'13px 28px', borderRadius:12, border:'none',
+                  background:'var(--primary)', color:'white',
+                  fontSize:15, fontWeight:600, fontFamily:'var(--font-ui)',
+                  cursor: loadingMore ? 'not-allowed' : 'pointer', opacity: loadingMore ? 0.7 : 1,
+                }}>
+                  {loadingMore ? 'Finding more…' : 'Get more ideas →'}
+                </button>
               </div>
+            ) : (
+              activeIdeas.map((idea, i) => (
+                <IdeaCard
+                  key={idea.id}
+                  idea={idea}
+                  index={i}
+                  isSaved={savedIds.has(idea.id)}
+                  onSave={() => onSave(idea)}
+                  onDismiss={() => onDismiss(idea.id)}
+                />
+              ))
             )}
 
-            {/* Steps — editorial, breathing */}
-            {data.how_it_unfolds && (
-              <div style={{ padding:'24px 0', borderBottom:'1px solid var(--border)' }}>
-                <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
-                  color:'var(--text-soft)', marginBottom:20 }}>How it unfolds</div>
-                <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
-                  {data.how_it_unfolds.map((step, i) => (
-                    <div key={i} style={{ display:'flex', gap:16 }}>
-                      <div style={{ flexShrink:0, fontFamily:'var(--font-display)', fontStyle:'italic',
-                        fontSize:32, fontWeight:600, color:'var(--border)', lineHeight:1, width:28, paddingTop:2 }}>
-                        {i+1}
-                      </div>
-                      <p style={{ fontSize:15.5, lineHeight:1.7, color:'var(--text)', margin:0, paddingTop:5 }}>{step}</p>
-                    </div>
-                  ))}
-                </div>
+            {activeIdeas.length > 0 && (
+              <div style={{ textAlign:'center', paddingTop:8, paddingBottom:20 }}>
+                <button onClick={onMoreIdeas} disabled={loadingMore} style={{
+                  padding:'12px 28px', borderRadius:12,
+                  border:'1.5px solid var(--border)',
+                  background:'transparent', color:'var(--text-soft)',
+                  fontSize:14, fontWeight:500, fontFamily:'var(--font-ui)',
+                  cursor: loadingMore ? 'not-allowed' : 'pointer', opacity: loadingMore ? 0.7 : 1,
+                  transition:'all 0.2s',
+                }}>
+                  {loadingMore ? 'Finding more…' : '+ More ideas'}
+                </button>
               </div>
             )}
+          </div>
 
-            {/* Quieter zone — context, de-emphasised */}
-            <div style={{ paddingTop:20 }}>
-              {data.the_why && (
-                <div style={{ marginBottom:20 }}>
-                  <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
-                    color:'var(--text-soft)', marginBottom:6 }}>Why this works</div>
-                  <p style={{ fontSize:14.5, lineHeight:1.7, color:'var(--text-soft)', margin:0 }}>{data.the_why}</p>
-                </div>
+          {/* Footer actions */}
+          <div style={{ padding:'0 20px', borderTop:'1px solid var(--border)', paddingTop:20, marginTop:4 }}>
+            <div style={{ display:'flex', gap:10 }}>
+              <button onClick={onReset} style={{
+                flex:1, padding:'13px', borderRadius:12, border:'2px solid var(--border)',
+                background:'transparent', fontSize:14, fontWeight:600, color:'var(--text-soft)',
+                cursor:'pointer', fontFamily:'var(--font-ui)',
+              }}>← New session</button>
+              {bankCount > 0 && (
+                <button onClick={onViewBank} style={{
+                  flex:1, padding:'13px', borderRadius:12, border:'none',
+                  background:'var(--sage)', color:'var(--primary)',
+                  fontSize:14, fontWeight:600, cursor:'pointer', fontFamily:'var(--font-ui)',
+                }}>
+                  View bank ({bankCount})
+                </button>
               )}
-
-              {data.one_thing_to_watch && (
-                <div style={{ marginBottom:20, paddingLeft:14, borderLeft:'2px solid var(--border)' }}>
-                  <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
-                    color:'var(--text-soft)', marginBottom:6 }}>Something to watch</div>
-                  <p style={{ fontSize:14.5, lineHeight:1.7, color:'var(--text-soft)', margin:0 }}>{data.one_thing_to_watch}</p>
-                </div>
-              )}
-
-              {data.take_out && (
-                <div style={{ marginBottom:20, paddingLeft:14, borderLeft:'2px solid var(--accent-light)' }}>
-                  <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
-                    color:'var(--accent)', marginBottom:6 }}>Before you finish</div>
-                  <p style={{ fontSize:14.5, lineHeight:1.7, color:'var(--text)', margin:0 }}>{data.take_out}</p>
-                </div>
-              )}
-
-              {data.triage_tier === 2 && data.redirect_message && (
-                <div style={{ marginBottom:20, padding:'14px 16px', background:'#FFF5F5',
-                  borderRadius:10, border:'1px solid #FECACA' }}>
-                  <div style={{ fontSize:10.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px',
-                    color:'#DC2626', marginBottom:6 }}>Worth knowing</div>
-                  <p style={{ fontSize:14.5, lineHeight:1.7, color:'#7F1D1D', margin:0 }}>{data.redirect_message}</p>
-                </div>
-              )}
-
-              {data.why_this_works && <WhyAccordion text={data.why_this_works} />}
             </div>
+          </div>
+        </div>
+      );
+    }
 
-            <ActionRow onReset={onReset} onTryAgain={onTryAgain} loading={loading} />
+    // ─── BANK SCREEN ──────────────────────────────────────────────────────────
+    function BankScreen({ bank, onRemove, onBack, onClearAll }) {
+      useEffect(() => { window.scrollTo(0, 0); }, []);
+      return (
+        <div style={{ maxWidth:520, margin:'0 auto', paddingBottom:60 }}>
+          <div style={{ background:'var(--primary)', padding:'24px 24px 22px' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
+              <Logo size="sm" dark />
+              <button onClick={onBack} style={{
+                background:'rgba(255,255,255,0.12)', border:'none', borderRadius:20,
+                padding:'6px 14px', color:'white', fontSize:13, fontWeight:600,
+                cursor:'pointer', fontFamily:'var(--font-ui)',
+              }}>← Back</button>
+            </div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:500,
+              color:'white', letterSpacing:'-0.3px' }}>
+              Your idea bank
+            </div>
+            <p style={{ fontSize:13.5, color:'rgba(255,255,255,0.6)', marginTop:6, lineHeight:1.5 }}>
+              {bank.length} {bank.length === 1 ? 'idea' : 'ideas'} saved — use them whenever the moment is right.
+            </p>
+          </div>
+
+          <div style={{ padding:'20px 20px 0' }}>
+            {bank.length === 0 ? (
+              <div style={{ textAlign:'center', padding:'48px 20px', color:'var(--text-soft)' }}>
+                <div style={{ fontSize:32, marginBottom:12 }}>✦</div>
+                <p style={{ fontSize:15 }}>No ideas saved yet.</p>
+                <p style={{ fontSize:14, marginTop:8 }}>Go back and save the ones you want to keep.</p>
+                <button onClick={onBack} style={{
+                  marginTop:20, padding:'13px 28px', borderRadius:12, border:'2px solid var(--border)',
+                  background:'transparent', fontSize:14, fontWeight:600, color:'var(--text-soft)',
+                  cursor:'pointer', fontFamily:'var(--font-ui)',
+                }}>← Back to ideas</button>
+              </div>
+            ) : (
+              <>
+                {bank.map((idea, i) => (
+                  <BankCard key={idea.id} idea={idea} index={i} onRemove={() => onRemove(idea.id)} />
+                ))}
+                <div style={{ textAlign:'center', paddingTop:12, paddingBottom:20 }}>
+                  <button onClick={onClearAll} style={{
+                    background:'none', border:'none', cursor:'pointer',
+                    fontSize:13, color:'var(--text-soft)', fontFamily:'var(--font-ui)',
+                    textDecoration:'underline',
+                  }}>Clear all saved ideas</button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       );
@@ -1082,13 +1116,41 @@
 
     function App() {
       const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+      // Screens: intro | form | loading | ideas | bank
       const [screen, setScreen]       = useState('intro');
       const [stepIndex, setStepIndex] = useState(0);
       const [answers, setAnswers]     = useState({});
-      const [output, setOutput]       = useState(null);
       const [error, setError]         = useState(null);
-      const [retrying, setRetrying]   = useState(false);
-      const lastMessage               = useRef(null);
+
+      // Ideas state
+      const [responseData, setResponseData] = useState(null);  // latest API response
+      const [allIdeas, setAllIdeas]         = useState([]);     // accumulated idea objects {id, text}
+      const [dismissedIds, setDismissedIds] = useState(new Set());
+      const [savedIds, setSavedIds]         = useState(new Set());
+      const [loadingMore, setLoadingMore]   = useState(false);
+      const [bank, setBank]                 = useState(() => loadBank());
+      const userMessageRef                  = useRef(null);
+
+      // Saved profile
+      const [savedProfile] = useState(() => loadProfile());
+
+      // Build full question list: profile questions + session question
+      // If we have a saved profile, start from the session question directly
+      const allQuestions = [...PROFILE_QUESTIONS, SESSION_QUESTION];
+
+      // Pre-fill answers from saved profile on mount
+      useEffect(() => {
+        if (savedProfile) {
+          setAnswers({
+            name:        savedProfile.name        || '',
+            age:         savedProfile.age         || '',
+            temperament: savedProfile.temperament || [],
+            loves_play:  savedProfile.loves_play  || '',
+            loves_now:   savedProfile.loves_now   || '',
+          });
+        }
+      }, []);
 
       useEffect(() => {
         const vars = THEMES[tweaks.theme] || THEMES.storybook;
@@ -1096,28 +1158,20 @@
         document.body.style.fontSize = tweaks.fontSize + 'px';
       }, [tweaks.theme, tweaks.fontSize]);
 
-      const activeQuestions = getActiveQuestions(answers);
-      const currentQuestion = activeQuestions[stepIndex];
-
       function handleAnswer(id, value) {
-        setAnswers(prev => {
-          const next = { ...prev, [id]: value };
-          if (id==='timing') { delete next.energy; delete next.location; }
-          return next;
-        });
+        setAnswers(prev => ({ ...prev, [id]: value }));
         setError(null);
       }
 
       function handleContinue(val, qId) {
         const newAnswers = { ...answers };
-        if (val !== undefined && qId) {
-          newAnswers[qId] = val;
-          if (qId==='timing') { delete newAnswers.energy; delete newAnswers.location; }
-          setAnswers(newAnswers);
+        if (val !== undefined && qId) newAnswers[qId] = val;
+        setAnswers(newAnswers);
+        if (stepIndex + 1 >= allQuestions.length) {
+          submitForm(newAnswers);
+        } else {
+          setStepIndex(s => s+1);
         }
-        const active = getActiveQuestions(newAnswers);
-        if (stepIndex + 1 >= active.length) submitForm(newAnswers);
-        else setStepIndex(s => s+1);
       }
 
       function handleBack() {
@@ -1128,38 +1182,130 @@
 
       async function submitForm(ans) {
         const a = ans || answers;
-        if (!a.age)        { setError("Please select your child's age."); return; }
-        if (!a.goal?.trim()) { setError("Please describe what you'd like play to help with."); return; }
+        if (!a.age)              { setError("Please select your child's age."); return; }
+        if (!a.challenges?.trim()) { setError("Please describe what you'd like play to help with."); return; }
+
+        // Save profile to localStorage
+        saveProfile({
+          name:        a.name,
+          age:         a.age,
+          temperament: a.temperament,
+          loves_play:  a.loves_play,
+          loves_now:   a.loves_now,
+        });
+
         setScreen('loading');
         const msg = buildUserMessage(a);
-        lastMessage.current = msg;
+        userMessageRef.current = msg;
+
         try {
-          const data = await generatePlayIdea(msg, tweaks.apiUrl);
-          setOutput(data);
-          setScreen('output');
+          const data = await generateIdeas(msg, tweaks.apiUrl, null);
+          const ideas = buildIdeaObjects(data, a);
+          setResponseData(data);
+          setAllIdeas(ideas);
+          setDismissedIds(new Set());
+          setSavedIds(new Set());
+          setScreen('ideas');
         } catch(e) {
           setScreen('form');
           setError('Something went wrong. Please try again.');
         }
       }
 
-      async function handleTryAgain() {
-        if (!lastMessage.current) return;
-        setRetrying(true);
+      function buildIdeaObjects(data, ans) {
+        if (!data.ideas) return [];
+        const profile = { name: ans?.name || answers.name, age: ans?.age || answers.age };
+        return data.ideas.map((text, i) => ({
+          id: Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2),
+          text,
+          profile,
+        }));
+      }
+
+      async function handleMoreIdeas() {
+        if (!userMessageRef.current) return;
+        setLoadingMore(true);
         try {
-          const data = await generatePlayIdea(
-            lastMessage.current + '\n\nPlease suggest a completely different approach from your previous suggestion.',
-            tweaks.apiUrl
-          );
-          setOutput(data);
+          const allExisting = allIdeas;
+          const data = await generateIdeas(userMessageRef.current, tweaks.apiUrl, allExisting);
+          const newIdeas = buildIdeaObjects(data, null);
+          setAllIdeas(prev => [...prev, ...newIdeas]);
+          // Update this_is_normal from latest response (keep triage tier)
+          setResponseData(prev => ({ ...prev, ideas: data.ideas }));
         } catch(e) {}
-        setRetrying(false);
+        setLoadingMore(false);
+      }
+
+      function handleSaveIdea(idea) {
+        setSavedIds(prev => {
+          const next = new Set(prev);
+          if (next.has(idea.id)) {
+            next.delete(idea.id);
+            // Also remove from bank
+            const newBank = bank.filter(b => b.id !== idea.id);
+            setBank(newBank);
+            saveBank(newBank);
+          } else {
+            next.add(idea.id);
+            const newBank = [...bank, idea];
+            setBank(newBank);
+            saveBank(newBank);
+          }
+          return next;
+        });
+      }
+
+      function handleDismissIdea(id) {
+        setDismissedIds(prev => { const next = new Set(prev); next.add(id); return next; });
+      }
+
+      function handleRemoveFromBank(id) {
+        const newBank = bank.filter(b => b.id !== id);
+        setBank(newBank);
+        saveBank(newBank);
+        setSavedIds(prev => { const next = new Set(prev); next.delete(id); return next; });
+      }
+
+      function handleClearBank() {
+        setBank([]);
+        saveBank([]);
+        setSavedIds(new Set());
       }
 
       function handleReset() {
-        setScreen('intro'); setStepIndex(0); setAnswers({});
-        setOutput(null); setError(null); lastMessage.current = null;
+        setScreen('intro');
+        setStepIndex(0);
+        // Keep answers from saved profile, clear session answer
+        const profile = loadProfile();
+        if (profile) {
+          setAnswers({
+            name: profile.name || '', age: profile.age || '',
+            temperament: profile.temperament || [],
+            loves_play: profile.loves_play || '', loves_now: profile.loves_now || '',
+          });
+        } else {
+          setAnswers({});
+        }
+        setResponseData(null);
+        setAllIdeas([]);
+        setDismissedIds(new Set());
+        setSavedIds(new Set());
+        setError(null);
+        userMessageRef.current = null;
         window.scrollTo(0,0);
+      }
+
+      // Active ideas = all minus dismissed
+      const activeIdeas = allIdeas.filter(idea => !dismissedIds.has(idea.id));
+
+      // When starting a new session, jump to session question if profile is saved
+      function handleStart() {
+        if (savedProfile) {
+          setStepIndex(PROFILE_QUESTIONS.length); // jump to session question
+        } else {
+          setStepIndex(0);
+        }
+        setScreen('form');
       }
 
       return (
@@ -1181,16 +1327,45 @@
             </TweakSection>
           </TweaksPanel>
 
-          {screen==='intro'   && <IntroScreen onStart={() => setScreen('form')} />}
-          {screen==='form' && currentQuestion && (
-            <QuestionCard key={stepIndex} q={currentQuestion} stepIndex={stepIndex}
-              total={activeQuestions.length} answers={answers}
-              onAnswer={handleAnswer} onContinue={handleContinue} onBack={handleBack} error={error} />
+          {screen==='intro' && (
+            <IntroScreen onStart={handleStart} savedProfile={savedProfile} />
+          )}
+          {screen==='form' && (
+            <QuestionCard
+              key={stepIndex}
+              q={allQuestions[stepIndex]}
+              stepIndex={stepIndex}
+              total={allQuestions.length}
+              answers={answers}
+              onAnswer={handleAnswer}
+              onContinue={handleContinue}
+              onBack={handleBack}
+              error={error}
+            />
           )}
           {screen==='loading' && <LoadingScreen name={answers.name} />}
-          {screen==='output'  && output && (
-            <OutputCard data={output} answers={answers}
-              onReset={handleReset} onTryAgain={handleTryAgain} loading={retrying} />
+          {screen==='ideas' && responseData && (
+            <IdeasScreen
+              responseData={responseData}
+              activeIdeas={activeIdeas}
+              savedIds={savedIds}
+              answers={answers}
+              onSave={handleSaveIdea}
+              onDismiss={handleDismissIdea}
+              onMoreIdeas={handleMoreIdeas}
+              loadingMore={loadingMore}
+              onReset={handleReset}
+              onViewBank={() => setScreen('bank')}
+              bankCount={bank.length}
+            />
+          )}
+          {screen==='bank' && (
+            <BankScreen
+              bank={bank}
+              onRemove={handleRemoveFromBank}
+              onBack={() => setScreen(responseData ? 'ideas' : 'intro')}
+              onClearAll={handleClearBank}
+            />
           )}
         </>
       );
